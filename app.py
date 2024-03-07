@@ -15,49 +15,30 @@ def main():
     SHEET_NAME = 'test'
     url = f'https://docs.google.com/spreadsheets/d/{SHEET_ID}/gviz/tq?tqx=out:csv&sheet={SHEET_NAME}'
 
+    # Specifica manualmente il tipo di dati delle colonne durante il caricamento del CSV
     dtype_dict = {'Collo': str}  
+    # Utilizza la funzione `converters` per specificare il tipo di dati della colonna 'UPC' come `str`
     converters = {'customer PO': str, 'UPC': str}
     df = pd.read_csv(url, dtype=dtype_dict, converters=converters)
 
+    # Ordina le colonne nel DataFrame
     df = df[['Collo', 'customer PO', 'SKU', 'Size', 'Unità', 'UPC', 'Made in', 'Import Date']]
 
-    # Utilizza una variabile per memorizzare il valore della casella di ricerca
-    input_value = st.text_input('Inserire il barcode')
-
-    # Filtra il DataFrame in tempo reale mentre l'utente digita nella casella di ricerca
-    filtered_df = df[df['Collo'].str.contains(input_value, na=False)]
+    bar = st.text_input('Inserire il barcode')
 
     if st.button('Check'):
-        if not filtered_df.empty:
+        result_df = df[df['Collo'] == bar]
+        if not result_df.empty:
             st.success("Barcode TROVATO")
-            result_df_styled = filtered_df.style.apply(highlight_customer_po, axis=0)
-            if len(filtered_df) > 10:
+            # Applica la formattazione condizionale alle celle della colonna 'customer PO'
+            result_df_styled = result_df.style.apply(highlight_customer_po, axis=0)
+            # Visualizzazione della tabella con Streamlit
+            if len(result_df) > 10:
                 st.dataframe(result_df_styled)
             else:
                 st.dataframe(result_df_styled, height=None)
         else:
             st.error("BARCODE NON TROVATO!!!!!!")
-
-    # Inserisci CSS personalizzato direttamente tramite st.markdown
-    st.markdown("""
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
-        }
-        .stApp {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-        h1 {
-            color: #333;
-        }
-    </style>
-    """, unsafe_allow_html=True)
 
 if __name__ == "__main__":
     main()
