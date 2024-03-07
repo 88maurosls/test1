@@ -10,7 +10,7 @@ def main():
     url = f'https://docs.google.com/spreadsheets/d/{SHEET_ID}/gviz/tq?tqx=out:csv&sheet={SHEET_NAME}'
 
     # Specifica esplicitamente i tipi di dati delle colonne durante la lettura
-    dtype_dict = {'Collo': str, 'Customer PO': str}  # Aggiungi altre colonne se necessario
+    dtype_dict = {'Collo': str, 'Customer PO': object}  # Aggiungi altre colonne se necessario
     df = pd.read_csv(url, dtype=dtype_dict)
 
     bar = st.text_input('Inserire il barcode')
