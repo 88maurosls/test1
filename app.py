@@ -26,6 +26,10 @@ def main():
 
     # Aggiungi un pulsante "Reset" per cancellare il valore della casella di ricerca
     if st.button('Reset'):
+        # Elimina il placeholder attuale
+        bar_placeholder.empty()
+        # Crea un nuovo placeholder e aggiungi la casella di ricerca vuota
+        bar_placeholder = st.empty()
         bar_placeholder.text_input('Inserire il barcode', '')
 
     bar_input = bar_placeholder.text_input('Inserire il barcode')
