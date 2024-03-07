@@ -24,7 +24,8 @@ def main():
     # Ordina le colonne nel DataFrame
     df = df[['Collo', 'customer PO', 'SKU', 'Size', 'Unità', 'UPC', 'Made in', 'Import Date']]
 
-    bar = st.text_input('Inserire il barcode')
+    # Svuota la casella di testo "Inserire barcode" quando viene cliccata
+    bar = st.text_input('Inserire il barcode', key="barcode_input", on_change="")
 
     if st.button('Check'):
         result_df = df[df['Collo'] == bar]
