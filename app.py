@@ -9,7 +9,7 @@ def highlight_customer_po(value):
 
 def main():
     st.set_page_config(layout="wide", initial_sidebar_state="collapsed")
-    st.title("Frenz's Barcode App V2")
+    st.title("Barcode Scanner v2.0")
 
     SHEET_ID = '1Ps6OqL1cLdCiD30VJTkDhSWKNYW2I7Uqhg1viCBvFXQ'
     SHEET_NAME = 'test'
@@ -30,8 +30,6 @@ def main():
         result_df = df[df['Collo'] == bar]
         if not result_df.empty:
             st.success("Barcode TROVATO:")
-            # Formattazione in grassetto per la colonna 'customer PO'
-            result_df['customer PO'] = result_df['customer PO'].apply(lambda x: f"<b>{x}</b>")
             # Applica la formattazione condizionale alle celle della colonna 'customer PO'
             result_df_styled = result_df.style.apply(highlight_customer_po, axis=0)
             # Visualizzazione della tabella con Streamlit
