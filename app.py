@@ -13,19 +13,18 @@ def main():
     dtype_dict = {'Collo': str}  
     # Utilizza la funzione `converters` per specificare il tipo di dati della colonna 'customer PO' come `object`
     converters = {'customer PO': str}
-    converters = {'UPC': str}
-    converters = {'Rif. Sped.': str}
     df = pd.read_csv(url, dtype=dtype_dict, converters=converters)
 
     # Ordina le colonne nel DataFrame
-    df = df[['Collo', 'customer PO', 'Rif. Sped.', 'SKU', 'Size', 'Unità', 'UPC', 'Made in', 'Import Date']]
+    df = df[['Collo', 'customer PO', 'SKU', 'Size', 'Unità', 'UPC', 'Made in', 'Import Date']]
 
     bar = st.text_input('Inserire il barcode')
 
     if st.button('Check'):
-        if not df[df['Collo'] == bar].empty:
+        result_df = df[df['Collo'] == bar]
+        if not result_df.empty:
             st.success("Barcode TROVATO:")
-            st.dataframe(df[df['Collo'] == bar])
+            st.write(result_df)
         else:
             st.error("BARCODE NON TROVATO!!!!!!")
 
