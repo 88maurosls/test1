@@ -34,6 +34,7 @@ def main():
     bar = barcode_input
 
     if st.button('Check'):
+        st.write("Valore inserito nella barra di ricerca:", bar)  # Visualizza il valore inserito nella barra di ricerca
         result_df = df[df['Collo'] == bar]
         if not result_df.empty:
             st.success("Barcode TROVATO")
