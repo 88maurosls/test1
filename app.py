@@ -21,14 +21,19 @@ def main():
 
     df = df[['Collo', 'customer PO', 'SKU', 'Size', 'Unità', 'UPC', 'Made in', 'Import Date']]
 
-    # Utilizza st.empty() per creare un placeholder per la casella di ricerca
-    input_placeholder = st.empty()
+    # Creare un placeholder per la casella di ricerca e il suo valore
+    search_input_placeholder = st.empty()
+    input_value_placeholder = st.empty()
 
     # Aggiungi un pulsante "Reset" per cancellare il valore della casella di ricerca
     if st.button('Reset'):
         input_value = ''
+        input_value_placeholder.empty()  # Rimuovere il valore precedente
     else:
-        input_value = input_placeholder.text_input('Inserire il barcode')
+        input_value = input_value_placeholder.text_input('Inserire il barcode', '')
+
+    # Memorizzare il valore corrente nella casella di ricerca
+    input_value_placeholder.text('', value=input_value)
 
     if st.button('Check'):
         result_df = df[df['Collo'] == input_value]
