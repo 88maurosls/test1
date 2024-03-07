@@ -1,9 +1,7 @@
 import streamlit as st
 import pandas as pd
-import pandas_bokeh
 
 def main():
-    pandas_bokeh.output_notebook()
     st.set_page_config(layout="wide", initial_sidebar_state="collapsed")
     st.title("Frenz's Barcode App V2")
 
@@ -28,8 +26,8 @@ def main():
             st.success("Barcode TROVATO:")
             # Formattazione in grassetto per la colonna 'customer PO'
             result_df['customer PO'] = result_df['customer PO'].apply(lambda x: f"<b>{x}</b>")
-            # Visualizzazione della tabella utilizzando pandas_bokeh
-            st.bokeh_chart(result_df, use_container_width=True)
+            # Visualizzazione della tabella con Streamlit
+            st.dataframe(result_df, height=500)
         else:
             st.error("BARCODE NON TROVATO!!!!!!")
 
