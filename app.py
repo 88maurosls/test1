@@ -24,14 +24,12 @@ def main():
     # Ordina le colonne nel DataFrame
     df = df[['Collo', 'customer PO', 'SKU', 'Size', 'Unità', 'UPC', 'Made in', 'Import Date']]
 
-    # Memorizza lo stato della casella di ricerca nella sessione
-    session_state = st.session_state
-    if 'barcode_input_key' not in session_state:
-        session_state.barcode_input_key = 0
+    # Casella di ricerca del barcode
+    bar = st.text_input('Inserire il barcode', key="barcode_input")
 
-    # Aggiorna dinamicamente la chiave della casella di ricerca
-    bar_key = f"barcode_input_{session_state.barcode_input_key}"
-    bar = st.text_input('Inserire il barcode', key=bar_key)
+    # Pulsante per svuotare la casella di ricerca
+    if st.button("Svuota casella di ricerca"):
+        st.experimental_rerun()
 
     if st.button('Check'):
         result_df = df[df['Collo'] == bar]
@@ -44,8 +42,6 @@ def main():
                 st.dataframe(result_df_styled, height=None)
         else:
             st.error("BARCODE NON TROVATO!!!!!!")
-        # Incrementa la chiave della casella di ricerca per svuotarla alla prossima pressione del pulsante "Check"
-        session_state.barcode_input_key += 1
 
 if __name__ == "__main__":
     main()
