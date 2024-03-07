@@ -24,16 +24,14 @@ def main():
     # Utilizza una variabile per memorizzare il valore della casella di ricerca
     input_value = st.text_input('Inserire il barcode')
 
-    # Aggiungi un pulsante "Reset" per cancellare il valore della casella di ricerca
-    if st.button('Reset'):
-        input_value = ''
+    # Filtra il DataFrame in tempo reale mentre l'utente digita nella casella di ricerca
+    filtered_df = df[df['Collo'].str.contains(input_value, na=False)]
 
     if st.button('Check'):
-        result_df = df[df['Collo'] == input_value]
-        if not result_df.empty:
+        if not filtered_df.empty:
             st.success("Barcode TROVATO")
-            result_df_styled = result_df.style.apply(highlight_customer_po, axis=0)
-            if len(result_df) > 10:
+            result_df_styled = filtered_df.style.apply(highlight_customer_po, axis=0)
+            if len(filtered_df) > 10:
                 st.dataframe(result_df_styled)
             else:
                 st.dataframe(result_df_styled, height=None)
