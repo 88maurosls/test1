@@ -29,9 +29,15 @@ def main():
         st.session_state.barcode_input = ""
 
     # Barra di ricerca del barcode
-    barcode_input = st.text_input('Inserire il barcode', value=st.session_state.barcode_input)
+    if 'barcode_input' not in st.session_state:
+        st.session_state.barcode_input = ''
+    def submit():
+        st.session_state.barcode_input = st.session_state.widget
+        st.session_state.widget = ''
+    
+    st.text_input('Inserire il barcode', key='widget', on_change=submit)
 
-    bar = barcode_input
+    bar = st.session_state.barcode_input
 
     if st.button('Check'):
         st.write("Valore inserito nella barra di ricerca:", bar)  # Visualizza il valore inserito nella barra di ricerca
