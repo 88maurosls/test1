@@ -23,6 +23,10 @@ def main():
 
     bar = st.text_input('Inserire il barcode')
 
+    # Aggiungi un pulsante "Reset" per cancellare il valore della casella di ricerca
+    if st.button('Reset'):
+        bar = ''
+
     if st.button('Check'):
         result_df = df[df['Collo'] == bar]
         if not result_df.empty:
