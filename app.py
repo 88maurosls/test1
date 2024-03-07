@@ -29,7 +29,7 @@ def main():
     if st.button('Check'):
         result_df = df[df['Collo'] == bar]
         if not result_df.empty:
-            st.success("Barcode TROVATO:")
+            st.success("Barcode TROVATO")
             # Applica la formattazione condizionale alle celle della colonna 'customer PO'
             result_df_styled = result_df.style.apply(highlight_customer_po, axis=0)
             # Visualizzazione della tabella con Streamlit
