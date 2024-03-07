@@ -3,7 +3,7 @@ import pandas as pd
 
 def main():
     st.set_page_config(layout="wide")
-    st.title("Barcode Scanner v2.0")
+    st.title("Frenz's Barcode App V2")
 
     SHEET_ID = '1Ps6OqL1cLdCiD30VJTkDhSWKNYW2I7Uqhg1viCBvFXQ'
     SHEET_NAME = 'test'
@@ -12,11 +12,11 @@ def main():
     # Specifica manualmente il tipo di dati delle colonne durante il caricamento del CSV
     dtype_dict = {'Collo': str}  
     # Utilizza la funzione `converters` per specificare il tipo di dati della colonna 'UPC' come `str`
-    converters = {'customer PO': str, 'UPC': str, 'Rif. Sped.': str}
+    converters = {'customer PO': str, 'UPC': str}
     df = pd.read_csv(url, dtype=dtype_dict, converters=converters)
 
     # Ordina le colonne nel DataFrame
-    df = df[['Collo', 'customer PO', 'Rif. Sped.', 'SKU', 'Size', 'Unità', 'UPC', 'Made in', 'Import Date']]
+    df = df[['Collo', 'customer PO', 'SKU', 'Size', 'Unità', 'UPC', 'Made in', 'Import Date']]
 
     bar = st.text_input('Inserire il barcode')
 
@@ -24,6 +24,8 @@ def main():
         result_df = df[df['Collo'] == bar]
         if not result_df.empty:
             st.success("Barcode TROVATO:")
+            # Formattazione in grassetto per la colonna 'customer PO'
+            result_df['customer PO'] = result_df['customer PO'].apply(lambda x: f"**{x}**")
             st.dataframe(result_df)
         else:
             st.error("BARCODE NON TROVATO!!!!!!")
