@@ -25,9 +25,8 @@ def main():
         if not result_df.empty:
             st.success("Barcode TROVATO:")
             # Formattazione in grassetto per la colonna 'customer PO'
-            result_df['customer PO'] = result_df['customer PO'].apply(lambda x: f"**{x}**")
-            # Utilizzo di st.write per visualizzare la tabella con il testo in grassetto
-            st.write(result_df.to_html(escape=False), unsafe_allow_html=True)
+            result_df = result_df.style.applymap(lambda x: "font-weight: bold", subset=['customer PO'])
+            st.dataframe(result_df, unsafe_allow_html=True)
         else:
             st.error("BARCODE NON TROVATO!!!!!!")
 
