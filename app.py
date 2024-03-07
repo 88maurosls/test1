@@ -24,8 +24,6 @@ def main():
         result_df = df[df['Collo'] == bar]
         if not result_df.empty:
             st.success("Barcode TROVATO:")
-            # Formattazione in grassetto per la colonna 'customer PO'
-            result_df['customer PO'] = result_df['customer PO'].apply(lambda x: f"<b>{x}</b>")
             # Ordina il DataFrame in ordine crescente per default
             result_df = result_df.sort_values(by='Collo', ascending=True)
             # Visualizzazione della tabella con Streamlit
