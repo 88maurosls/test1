@@ -26,10 +26,18 @@ def main():
             st.success("Barcode TROVATO:")
             # Formattazione in grassetto per la colonna 'customer PO'
             result_df['customer PO'] = result_df['customer PO'].apply(lambda x: f"<b>{x}</b>")
-            # Applicazione di stili CSS per l'intestazione della tabella
-            st.table(result_df.style.set_table_styles(
-                [{'selector': 'thead', 'props': [('position', 'sticky'), ('top', '0')]}]
-            ), unsafe_allow_html=True)
+            # Creazione di una tabella HTML con intestazione fissa
+            table = f"<table><thead style='position: sticky; top: 0; background-color: white;'><tr>"
+            for col in result_df.columns:
+                table += f"<th>{col}</th>"
+            table += "</tr></thead><tbody>"
+            for index, row in result_df.iterrows():
+                table += "<tr>"
+                for value in row:
+                    table += f"<td>{value}</td>"
+                table += "</tr>"
+            table += "</tbody></table>"
+            st.write(table, unsafe_allow_html=True)
         else:
             st.error("BARCODE NON TROVATO!!!!!!")
 
