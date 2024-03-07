@@ -25,7 +25,7 @@ def main():
     df = df[['Collo', 'customer PO', 'SKU', 'Size', 'Unità', 'UPC', 'Made in', 'Import Date']]
 
     # Aggiungi una key univoca al widget text_input
-    bar = st.text_input('Inserire il barcode', key='barcode_input')
+    bar = st.text_input('Inserire il barcode', value='', key='barcode_input')
 
     if st.button('Check'):
         result_df = df[df['Collo'] == bar]
@@ -34,15 +34,11 @@ def main():
             # Applica la formattazione condizionale alle celle della colonna 'customer PO'
             result_df_styled = result_df.style.apply(highlight_customer_po, axis=0)
             # Visualizzazione della tabella con Streamlit
-            if len(result_df) > 10:
-                st.dataframe(result_df_styled)
-            else:
-                st.dataframe(result_df_styled, height=None)
-
-            # Aggiorna il valore del widget text_input per cancellare il valore inserito
-            st.session_state.barcode_input = ""
+            st.dataframe(result_df_styled)
+            # Reset del valore del widget text_input
+            st.session_state.barcode_input = ''
         else:
             st.error("BARCODE NON TROVATO!!!!!!")
+            # Non resettare il valore se il barcode non viene trovato per consentire all'utente di rivedere cosa ha inserito
 
-if __name__ == "__main__":
-    main()
+if __
