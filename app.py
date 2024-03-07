@@ -26,7 +26,7 @@ def main():
 
     # Aggiungi un pulsante "Reset" per cancellare il valore della casella di ricerca
     if st.button('Reset'):
-        input_value = ''  # Reimposta manualmente il valore della casella di ricerca
+        input_value = ''
 
     if st.button('Check'):
         result_df = df[df['Collo'] == input_value]
