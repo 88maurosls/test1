@@ -42,6 +42,8 @@ def main():
             st.table(result_df_styled)
         else:
             st.error("BARCODE NON TROVATO!!!!!!")
+        # Azzerare il contenuto della barra di ricerca dopo aver eseguito la ricerca
+        st.session_state.barcode_input = ""
 
 if __name__ == "__main__":
     main()
