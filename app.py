@@ -32,10 +32,15 @@ def main():
             st.success("Barcode TROVATO")
             # Applica la formattazione condizionale alle celle della colonna 'customer PO'
             result_df_styled = result_df.style.apply(highlight_customer_po, axis=0)
+            # Applica lo stile alla tabella
+            result_df_styled.set_table_styles([{
+                'selector': 'td',
+                'props': [
+                    ('max-width', '50px')
+                ]
+            }])
             # Visualizzazione della tabella con Streamlit
-            st.table(result_df_styled.set_table_styles({
-                'props': [('max-width', '50px')]
-            }))
+            st.table(result_df_styled)
         else:
             st.error("BARCODE NON TROVATO!!!!!!")
 
