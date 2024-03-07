@@ -22,16 +22,16 @@ def main():
     df = df[['Collo', 'customer PO', 'SKU', 'Size', 'Unità', 'UPC', 'Made in', 'Import Date']]
 
     # Utilizza st.empty() per creare un placeholder per la casella di ricerca
-    bar_input = st.empty()
+    input_placeholder = st.empty()
 
     # Aggiungi un pulsante "Reset" per cancellare il valore della casella di ricerca
     if st.button('Reset'):
-        bar_input.text_input('Inserire il barcode', '')
-
-    bar_input = bar_input.text_input('Inserire il barcode')
+        input_value = ''
+    else:
+        input_value = input_placeholder.text_input('Inserire il barcode')
 
     if st.button('Check'):
-        result_df = df[df['Collo'] == bar_input]
+        result_df = df[df['Collo'] == input_value]
         if not result_df.empty:
             st.success("Barcode TROVATO")
             result_df_styled = result_df.style.apply(highlight_customer_po, axis=0)
