@@ -24,8 +24,9 @@ def main():
     # Ordina le colonne nel DataFrame
     df = df[['Collo', 'customer PO', 'SKU', 'Size', 'Unità', 'UPC', 'Made in', 'Import Date']]
 
-    # Svuota la casella di testo "Inserire barcode" quando viene cliccata
-    bar = st.text_input('Inserire il barcode', key="barcode_input", on_change="")
+    # Aggiorna la chiave della casella di testo ogni volta che viene premuto il pulsante "Check"
+    key = st.session_state.get('barcode_input_key', 0)
+    bar = st.text_input('Inserire il barcode', key=f"barcode_input_{key}")
 
     if st.button('Check'):
         result_df = df[df['Collo'] == bar]
@@ -40,6 +41,8 @@ def main():
                 st.dataframe(result_df_styled, height=None)
         else:
             st.error("BARCODE NON TROVATO!!!!!!")
+        # Incrementa la chiave della casella di testo per svuotarla alla prossima pressione del pulsante "Check"
+        st.session_state.barcode_input_key += 1
 
 if __name__ == "__main__":
     main()
