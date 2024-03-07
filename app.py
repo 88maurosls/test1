@@ -40,7 +40,7 @@ def main():
     bar = st.session_state.barcode_input
 
     if st.button('Check'):
-        st.write("Barcode:", bar)  # Visualizza il valore inserito nella barra di ricerca
+        st.write("Barcode cercato:", bar)  # Visualizza il valore inserito nella barra di ricerca
         result_df = df[df['Collo'] == bar]
         if not result_df.empty:
             st.success("TROVATA CORRISPONDENZA")
