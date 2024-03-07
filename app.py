@@ -26,6 +26,8 @@ def main():
             st.success("Barcode TROVATO:")
             # Formattazione in grassetto per la colonna 'customer PO'
             result_df['customer PO'] = result_df['customer PO'].apply(lambda x: f"<b>{x}</b>")
+            # Ordina il DataFrame in ordine crescente per default
+            result_df = result_df.sort_values(by='Collo', ascending=True)
             # Visualizzazione della tabella con Streamlit
             if len(result_df) > 10:
                 st.dataframe(result_df)
