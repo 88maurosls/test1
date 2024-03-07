@@ -32,11 +32,12 @@ def main():
     def submit():
         # Aggiorna lo stato della barra di ricerca con il valore attuale
         st.session_state.barcode_input = st.session_state.barcode_widget
+        return st.session_state.barcode_input
 
     # Barra di ricerca
-    st.text_input('Inserire il barcode', key="barcode_widget", on_change=submit, value=st.session_state.barcode_input)
+    barcode_input = st.text_input('Inserire il barcode', key="barcode_widget", value=st.session_state.barcode_input)
 
-    bar = st.session_state.barcode_input
+    bar = submit()
 
     if st.button('Check'):
         result_df = df[df['Collo'] == bar]
