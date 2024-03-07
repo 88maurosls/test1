@@ -24,21 +24,25 @@ def main():
     # Ordina le colonne nel DataFrame
     df = df[['Collo', 'customer PO', 'SKU', 'Size', 'Unità', 'UPC', 'Made in', 'Import Date']]
 
-    bar = st.sidebar.text_input('Inserire il barcode')
+    col1, col2 = st.columns([2, 1])
 
-    if st.sidebar.button('Check'):
-        result_df = df[df['Collo'] == bar]
-        if not result_df.empty:
-            st.success("Barcode TROVATO")
-            # Applica la formattazione condizionale alle celle della colonna 'customer PO'
-            result_df_styled = result_df.style.apply(highlight_customer_po, axis=0)
-            # Visualizzazione della tabella con Streamlit
-            if len(result_df) > 10:
-                st.dataframe(result_df_styled)
+    with col1:
+        bar = st.text_input('Inserire il barcode')
+
+    with col2:
+        if st.button('Check'):
+            result_df = df[df['Collo'] == bar]
+            if not result_df.empty:
+                st.success("Barcode TROVATO")
+                # Applica la formattazione condizionale alle celle della colonna 'customer PO'
+                result_df_styled = result_df.style.apply(highlight_customer_po, axis=0)
+                # Visualizzazione della tabella con Streamlit
+                if len(result_df) > 10:
+                    st.dataframe(result_df_styled)
+                else:
+                    st.dataframe(result_df_styled, height=None)
             else:
-                st.dataframe(result_df_styled, height=None)
-        else:
-            st.error("BARCODE NON TROVATO!!!!!!")
+                st.error("BARCODE NON TROVATO!!!!!!")
 
 if __name__ == "__main__":
     main()
