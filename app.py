@@ -3,7 +3,7 @@ import pandas as pd
 
 def main():
     st.set_page_config(layout="wide")
-    st.title("Frenz's Barcode App V2")
+    st.title("Barcode Scanner v2.0")
 
     SHEET_ID = '1Ps6OqL1cLdCiD30VJTkDhSWKNYW2I7Uqhg1viCBvFXQ'
     SHEET_NAME = 'test'
