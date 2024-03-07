@@ -9,16 +9,19 @@ def main():
     SHEET_NAME = 'test'
     url = f'https://docs.google.com/spreadsheets/d/{SHEET_ID}/gviz/tq?tqx=out:csv&sheet={SHEET_NAME}'
 
-    # Specifica esplicitamente i tipi di dati delle colonne durante la lettura
-    dtype_dict = {'Collo': str, 'Customer PO': str}  # Aggiungi altre colonne se necessario
-    df = pd.read_csv(url, dtype=dtype_dict)
+    # Tentativo di specificare una codifica e gestire valori nulli
+    df = pd.read_csv(url, dtype={'Collo': str, 'Customer PO': str}, encoding='utf-8', na_filter=False)
+
+    # Stampa dei dati grezzi per il debug
+    st.write(df.head())  # Stampa le prime cinque righe per il debug
 
     bar = st.text_input('Inserire il barcode')
 
     if st.button('Check'):
-        if not df[df['Collo'] == bar].empty:
+        result = df[df['Collo'] == bar]
+        if not result.empty:
             st.success("Barcode TROVATO:")
-            st.dataframe(df[df['Collo'] == bar])
+            st.dataframe(result)
         else:
             st.error("BARCODE NON TROVATO!!!!!!")
 
