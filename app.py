@@ -15,31 +15,29 @@ def main():
     SHEET_NAME = 'test'
     url = f'https://docs.google.com/spreadsheets/d/{SHEET_ID}/gviz/tq?tqx=out:csv&sheet={SHEET_NAME}'
 
-    # Specifica manualmente il tipo di dati delle colonne durante il caricamento del CSV
     dtype_dict = {'Collo': str}
-    # Utilizza la funzione `converters` per specificare il tipo di dati della colonna 'UPC' come `str`
     converters = {'customer PO': str, 'UPC': str}
     df = pd.read_csv(url, dtype=dtype_dict, converters=converters)
 
-    # Ordina le colonne nel DataFrame
     df = df[['Collo', 'customer PO', 'SKU', 'Size', 'Unità', 'UPC', 'Made in', 'Import Date']]
 
-    # Aggiungi una key univoca al widget text_input
-    bar = st.text_input('Inserire il barcode', value='', key='barcode_input')
+    # Utilizzo di un placeholder per resettare il widget
+    placeholder = st.empty()
+
+    # Aggiungo una key al widget e uso un bottone per resettarlo
+    bar = placeholder.text_input('Inserire il barcode', key='barcode_input')
 
     if st.button('Check'):
         result_df = df[df['Collo'] == bar]
         if not result_df.empty:
             st.success("Barcode TROVATO")
-            # Applica la formattazione condizionale alle celle della colonna 'customer PO'
             result_df_styled = result_df.style.apply(highlight_customer_po, axis=0)
-            # Visualizzazione della tabella con Streamlit
             st.dataframe(result_df_styled)
-            # Reset del valore del widget text_input
-            st.session_state.barcode_input = ''
         else:
             st.error("BARCODE NON TROVATO!!!!!!")
-            # Non resettare il valore se il barcode non viene trovato per consentire all'utente di rivedere cosa ha inserito
+        
+        # Dopo aver cliccato, si elimina il testo dall'input
+        placeholder.empty()
 
 if __name__ == "__main__":
     main()
