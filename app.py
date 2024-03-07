@@ -27,7 +27,10 @@ def main():
             # Formattazione in grassetto per la colonna 'customer PO'
             result_df['customer PO'] = result_df['customer PO'].apply(lambda x: f"<b>{x}</b>")
             # Visualizzazione della tabella con Streamlit
-            st.dataframe(result_df, height=500)
+            if len(result_df) > 1:
+                st.dataframe(result_df, height=len(result_df) * 25)
+            else:
+                st.dataframe(result_df, height=500)
         else:
             st.error("BARCODE NON TROVATO!!!!!!")
 
