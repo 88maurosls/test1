@@ -13,8 +13,8 @@ def main():
     dtype_dict = {'Collo': str}  # Imposta solo il tipo di dati per 'Collo'
     df = pd.read_csv(url, dtype=dtype_dict)
 
-    # Converti i valori della colonna 'Customer PO' in stringhe
-    df['Customer PO'] = df['Customer PO'].astype(str)
+    # Converti i valori della colonna 'customer PO' in stringhe
+    df['customer PO'] = df['customer PO'].astype(str)
 
     bar = st.text_input('Inserire il barcode')
 
