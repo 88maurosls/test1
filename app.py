@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 
 def main():
-    st.set_page_config(layout="wide")
+    st.set_page_config(layout="wide", initial_sidebar_state="collapsed")
     st.title("Frenz's Barcode App V2")
 
     SHEET_ID = '1Ps6OqL1cLdCiD30VJTkDhSWKNYW2I7Uqhg1viCBvFXQ'
@@ -26,8 +26,7 @@ def main():
             st.success("Barcode TROVATO:")
             # Formattazione in grassetto per la colonna 'customer PO'
             result_df['customer PO'] = result_df['customer PO'].apply(lambda x: f"<b>{x}</b>")
-            result_df = result_df.to_html(escape=False, index=False)
-            st.write(result_df, unsafe_allow_html=True)
+            st.table(result_df.style.set_table_styles([{'selector': 'thead', 'sticky': True}]), unsafe_allow_html=True)
         else:
             st.error("BARCODE NON TROVATO!!!!!!")
 
