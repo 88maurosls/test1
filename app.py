@@ -12,7 +12,7 @@ def main():
     # Specifica manualmente il tipo di dati delle colonne durante il caricamento del CSV
     dtype_dict = {'Collo': str}  
     # Utilizza la funzione `converters` per specificare il tipo di dati della colonna 'UPC' come `str`
-    converters = {'customer PO': str, 'UPC': str}
+    converters = {'customer PO': str, 'UPC': str, 'Rif. Sped.': str}
     df = pd.read_csv(url, dtype=dtype_dict, converters=converters)
 
     # Ordina le colonne nel DataFrame
