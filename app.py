@@ -9,7 +9,7 @@ def highlight_customer_po(value):
 
 def main():
     st.set_page_config(layout="wide", initial_sidebar_state="collapsed")
-    st.title("Barcode Scanner v2.1")
+    st.title("Dope Barcode Scanner v2.4")
 
     SHEET_ID = '1Ps6OqL1cLdCiD30VJTkDhSWKNYW2I7Uqhg1viCBvFXQ'
     SHEET_NAME = 'test'
