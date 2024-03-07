@@ -16,7 +16,7 @@ def main():
     df = pd.read_csv(url, dtype=dtype_dict, converters=converters)
 
     # Ordina le colonne nel DataFrame
-    df = df[['Collo', 'customer PO', 'SKU', 'Size', 'Unità', 'UPC', 'Made in', 'Import Date']]
+    df = df[['Collo', 'customer PO', 'Rif. Sped.', 'SKU', 'Size', 'Unità', 'UPC', 'Made in', 'Import Date']]
 
     bar = st.text_input('Inserire il barcode')
 
