@@ -10,8 +10,10 @@ def main():
     url = f'https://docs.google.com/spreadsheets/d/{SHEET_ID}/gviz/tq?tqx=out:csv&sheet={SHEET_NAME}'
 
     # Specifica manualmente il tipo di dati delle colonne durante il caricamento del CSV
-    dtype_dict = {'Collo': str, 'customer PO': str}  
-    df = pd.read_csv(url, dtype=dtype_dict)
+    dtype_dict = {'Collo': str}  
+    # Utilizza la funzione `converters` per specificare il tipo di dati della colonna 'customer PO' come `object`
+    converters = {'customer PO': str}
+    df = pd.read_csv(url, dtype=dtype_dict, converters=converters)
 
     bar = st.text_input('Inserire il barcode')
 
