@@ -1,6 +1,12 @@
 import streamlit as st
 import pandas as pd
 
+def highlight_customer_po(value):
+    if value.name == 'customer PO':
+        return ['background-color: #f3acac'] * len(value)
+    else:
+        return [''] * len(value)
+
 def main():
     st.set_page_config(layout="wide", initial_sidebar_state="collapsed")
     st.title("Frenz's Barcode App V2")
@@ -24,13 +30,15 @@ def main():
         result_df = df[df['Collo'] == bar]
         if not result_df.empty:
             st.success("Barcode TROVATO:")
-            # Ordina il DataFrame in ordine crescente per default
-            result_df = result_df.sort_values(by='Collo', ascending=True)
+            # Formattazione in grassetto per la colonna 'customer PO'
+            result_df['customer PO'] = result_df['customer PO'].apply(lambda x: f"<b>{x}</b>")
+            # Applica la formattazione condizionale alle celle della colonna 'customer PO'
+            result_df_styled = result_df.style.apply(highlight_customer_po, axis=0)
             # Visualizzazione della tabella con Streamlit
             if len(result_df) > 10:
-                st.dataframe(result_df)
+                st.dataframe(result_df_styled)
             else:
-                st.dataframe(result_df, height=None)
+                st.dataframe(result_df_styled, height=None)
         else:
             st.error("BARCODE NON TROVATO!!!!!!")
 
