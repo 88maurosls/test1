@@ -14,6 +14,7 @@ def main():
     # Utilizza la funzione `converters` per specificare il tipo di dati della colonna 'customer PO' come `object`
     converters = {'customer PO': str}
     converters = {'UPC': str}
+    converters = {'Rif. Sped.': str}
     df = pd.read_csv(url, dtype=dtype_dict, converters=converters)
 
     # Ordina le colonne nel DataFrame
