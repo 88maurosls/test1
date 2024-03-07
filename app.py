@@ -31,9 +31,11 @@ def main():
     # Barra di ricerca del barcode
     barcode_input = st.text_input('Inserire il barcode', value=st.session_state.barcode_input)
 
+    bar = barcode_input
+
     if st.button('Check'):
-        st.write("Valore inserito nella barra di ricerca:", barcode_input)  # Visualizza il valore inserito nella barra di ricerca
-        result_df = df[df['Collo'] == barcode_input]
+        st.write("Valore inserito nella barra di ricerca:", bar)  # Visualizza il valore inserito nella barra di ricerca
+        result_df = df[df['Collo'] == bar]
         if not result_df.empty:
             st.success("Barcode TROVATO")
             # Applica la formattazione condizionale alle celle della colonna 'customer PO'
@@ -42,8 +44,6 @@ def main():
             st.table(result_df_styled)
         else:
             st.error("BARCODE NON TROVATO!!!!!!")
-        # Azzerare il contenuto della barra di ricerca dopo aver eseguito la ricerca
-        st.session_state.barcode_input = ""
 
 if __name__ == "__main__":
     main()
