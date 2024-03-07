@@ -21,12 +21,12 @@ def main():
 
     df = df[['Collo', 'customer PO', 'SKU', 'Size', 'Unità', 'UPC', 'Made in', 'Import Date']]
 
-    # Utilizza una singola variabile per memorizzare il valore della casella di ricerca
-    input_value = st.text_area('Inserire il barcode')
+    # Utilizza una variabile per memorizzare il valore della casella di ricerca
+    input_value = st.text_input('Inserire il barcode')
 
     # Aggiungi un pulsante "Reset" per cancellare il valore della casella di ricerca
     if st.button('Reset'):
-        input_value = ''
+        input_value = ''  # Reimposta manualmente il valore della casella di ricerca
 
     if st.button('Check'):
         result_df = df[df['Collo'] == input_value]
