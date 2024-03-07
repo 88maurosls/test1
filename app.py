@@ -41,4 +41,5 @@ def main():
             st.error("BARCODE NON TROVATO!!!!!!")
             # Non resettare il valore se il barcode non viene trovato per consentire all'utente di rivedere cosa ha inserito
 
-if __
+if __name__ == "__main__":
+    main()
