@@ -1,7 +1,9 @@
 import streamlit as st
 import pandas as pd
+import pandas_bokeh
 
 def main():
+    pandas_bokeh.output_notebook()
     st.set_page_config(layout="wide", initial_sidebar_state="collapsed")
     st.title("Frenz's Barcode App V2")
 
@@ -26,18 +28,8 @@ def main():
             st.success("Barcode TROVATO:")
             # Formattazione in grassetto per la colonna 'customer PO'
             result_df['customer PO'] = result_df['customer PO'].apply(lambda x: f"<b>{x}</b>")
-            # Creazione di una tabella HTML con intestazione fissa e larghezza massima
-            table = f"<table style='width:100%;'><thead style='position: sticky; top: 0; background-color: white;'><tr>"
-            for col in result_df.columns:
-                table += f"<th>{col}</th>"
-            table += "</tr></thead><tbody>"
-            for index, row in result_df.iterrows():
-                table += "<tr>"
-                for value in row:
-                    table += f"<td>{value}</td>"
-                table += "</tr>"
-            table += "</tbody></table>"
-            st.write(table, unsafe_allow_html=True)
+            # Visualizzazione della tabella utilizzando pandas_bokeh
+            st.bokeh_chart(result_df, use_container_width=True)
         else:
             st.error("BARCODE NON TROVATO!!!!!!")
 
