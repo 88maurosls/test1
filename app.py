@@ -24,23 +24,11 @@ def main():
     # Ordina le colonne nel DataFrame
     df = df[['Collo', 'customer PO', 'SKU', 'Size', 'Unità', 'UPC', 'Made in', 'Import Date', 'Rif. Sped.']]
 
-    # Verifica se la chiave 'search_query' è presente in session_state, se non lo è, la inizializza a una stringa vuota
-    if "search_query" not in st.session_state:
-        st.session_state.search_query = ""
+    # Verifica se la chiave 'barcode_input' è presente in session_state, se non lo è, la inizializza a una stringa vuota
+    if "barcode_input" not in st.session_state:
+        st.session_state.barcode_input = ""
 
-    # Funzione per gestire il submit della barra di ricerca
-    def submit():
-        # Aggiorna lo stato della ricerca con il valore attuale della barra di ricerca e resetta la barra di ricerca
-        st.session_state.search_query = st.session_state.search_widget
-        st.session_state.search_widget = ""
-
-    # Barra di ricerca
-    st.text_input("Cerca", key="search_widget", on_change=submit)
-
-    # Ottiene il valore attuale della barra di ricerca dalla sessione
-    search_query = st.session_state.search_query
-
-    bar = st.text_input('Inserire il barcode')
+    bar = st.text_input('Inserire il barcode', key="barcode_input")
 
     if st.button('Check'):
         result_df = df[df['Collo'] == bar]
