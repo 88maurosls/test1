@@ -11,20 +11,20 @@ def main():
     url = f'https://docs.google.com/spreadsheets/d/{SHEET_ID}/gviz/tq?tqx=out:csv&sheet={SHEET_NAME}'
 
     # Lettura dei dati da Google Sheets
-    df = pd.read_csv(url, dtype={'Collo': str, 'Customer PO': str})
+    df = pd.read_csv(url)
 
-    # Assicurati che tutti i valori in 'Customer PO' siano letti come stringhe
-    df['Customer PO'] = df['Customer PO'].astype(str)
+    # Stampa i nomi delle colonne per assicurarti che siano corretti
+    st.write(df.columns)
 
-    # Rimuovere eventuali spazi vuoti iniziali o finali nei dati
-    df['Customer PO'] = df['Customer PO'].str.strip()
+    # Assicurati di utilizzare il nome esatto della colonna come appare nel DataFrame
+    # Ad esempio, se il nome della colonna è 'customer PO' invece di 'Customer PO'
+    df['customer PO'] = df['customer PO'].astype(str)
 
     bar = st.text_input('Inserire il barcode')
 
     if st.button('Check'):
         if not df[df['Collo'] == bar].empty:
             st.success("Barcode TROVATO:")
-            # Puoi rimuovere l'indice reset_index(drop=True) se desideri mantenere l'indice originale
             st.dataframe(df[df['Collo'] == bar].reset_index(drop=True))
         else:
             st.error("BARCODE NON TROVATO!!!!!!")
