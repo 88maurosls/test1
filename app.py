@@ -24,14 +24,14 @@ def main():
     # Ordina le colonne nel DataFrame
     df = df[['Collo', 'customer PO', 'SKU', 'Size', 'Unità', 'UPC', 'Made in', 'Import Date', 'Rif. Sped.']]
 
-    # Imposta la variabile di sessione per la barra di ricerca del barcode
+    # Verifica se la chiave 'barcode_input' è presente in session_state, se non lo è, la inizializza a una stringa vuota
     if "barcode_input" not in st.session_state:
         st.session_state.barcode_input = ""
 
     # Barra di ricerca del barcode
-    st.session_state.barcode_input = st.text_input('Inserire il barcode', value=st.session_state.barcode_input)
+    barcode_input = st.text_input('Inserire il barcode', value=st.session_state.barcode_input)
 
-    bar = st.session_state.barcode_input
+    bar = barcode_input
 
     if st.button('Check'):
         result_df = df[df['Collo'] == bar]
