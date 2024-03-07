@@ -27,7 +27,9 @@ def main():
     # Svuota la casella di testo "Inserire barcode" al clic del pulsante "Check" usando JavaScript
     js_clear_input = """
     <script>
-    document.getElementById("barcode_input").value = "";
+    document.getElementById("barcode_input").addEventListener("click", function() {
+        document.getElementById("barcode_input").value = "";
+    });
     </script>
     """
 
