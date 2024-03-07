@@ -26,8 +26,8 @@ def main():
             st.success("Barcode TROVATO:")
             # Formattazione in grassetto per la colonna 'customer PO'
             result_df['customer PO'] = result_df['customer PO'].apply(lambda x: f"<b>{x}</b>")
-            # Creazione di una tabella HTML con intestazione fissa
-            table = f"<table><thead style='position: sticky; top: 0; background-color: white;'><tr>"
+            # Creazione di una tabella HTML con intestazione fissa e larghezza massima
+            table = f"<table style='width: 100%; max-width: 1000px;'><thead style='position: sticky; top: 0; background-color: white;'><tr>"
             for col in result_df.columns:
                 table += f"<th>{col}</th>"
             table += "</tr></thead><tbody>"
