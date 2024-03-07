@@ -21,15 +21,12 @@ def main():
 
     df = df[['Collo', 'customer PO', 'SKU', 'Size', 'Unità', 'UPC', 'Made in', 'Import Date']]
 
-    # Aggiungi un pulsante "Reset" per cancellare il valore della casella di ricerca
-    reset_button = st.button('Reset')
+    # Utilizza st.empty() per creare un placeholder per la casella di ricerca
+    bar_input = st.text_input('Inserire il barcode')
 
-    # Se il pulsante "Reset" viene premuto, reimposta la casella di ricerca
-    if reset_button:
+    # Aggiungi un pulsante "Reset" per cancellare il valore della casella di ricerca
+    if st.button('Reset'):
         bar_input = ''
-    else:
-        # Utilizza st.text_input per la casella di ricerca e assegna il valore a una variabile
-        bar_input = st.text_input('Inserire il barcode')
 
     if st.button('Check'):
         result_df = df[df['Collo'] == bar_input]
@@ -47,22 +44,4 @@ def main():
     st.markdown("""
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
-        }
-        .stApp {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-        h1 {
-            color: #333;
-        }
-    </style>
-    """, unsafe_allow_html=True)
-
-if __name__ == "__main__":
-    main()
+            font-family: A
