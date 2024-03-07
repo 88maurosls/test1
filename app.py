@@ -24,20 +24,13 @@ def main():
     # Ordina le colonne nel DataFrame
     df = df[['Collo', 'customer PO', 'SKU', 'Size', 'Unità', 'UPC', 'Made in', 'Import Date']]
 
-    # Usiamo 'key' per aggiornare dinamicamente la casella di ricerca
-    bar = st.text_input('Inserire il barcode', key="barcode_input")
+    # Memorizza lo stato della casella di ricerca nella sessione
+    session_state = st.session_state
+    if 'barcode_input_key' not in session_state:
+        session_state.barcode_input_key = 0
 
-    # Aggiungiamo un tag HTML per svuotare la casella di ricerca al clic
-    empty_input_js = """
-    <script>
-    document.getElementById("barcode_input").onclick = function() {
-        document.getElementById("barcode_input").value = "";
-    }
-    </script>
-    """
-
-    # Esegui il codice JavaScript
-    st.markdown(empty_input_js, unsafe_allow_html=True)
+    # Aggiorna dinamicamente la chiave della casella di ricerca
+    bar = st.text_input('Inserire il barcode', key=f"barcode_input_{session_state.barcode_input_key}")
 
     if st.button('Check'):
         result_df = df[df['Collo'] == bar]
@@ -52,6 +45,8 @@ def main():
                 st.dataframe(result_df_styled, height=None)
         else:
             st.error("BARCODE NON TROVATO!!!!!!")
+        # Incrementa la chiave della casella di ricerca per svuotarla alla prossima pressione del pulsante "Check"
+        session_state.barcode_input_key += 1
 
 if __name__ == "__main__":
     main()
