@@ -26,7 +26,7 @@ def main():
             st.success("Barcode TROVATO:")
             # Formattazione in grassetto per la colonna 'customer PO'
             result_df['customer PO'] = result_df['customer PO'].apply(lambda x: f"<b>{x}</b>")
-            st.table(result_df.style.set_table_styles([{'selector': 'thead', 'sticky': True}]), unsafe_allow_html=True)
+            st.table(result_df, table_styles=[{'selector': 'thead', 'props': [('position', 'sticky'), ('top', '0')]}], unsafe_allow_html=True)
         else:
             st.error("BARCODE NON TROVATO!!!!!!")
 
