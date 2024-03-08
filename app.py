@@ -31,7 +31,25 @@ def main():
     # Barra di ricerca del barcode
     if 'barcode_input' not in st.session_state:
         st.session_state.barcode_input = ''
-    def submit():
+
+    bar = st.text_input('Inserire il barcode', key='widget')
+
+    # Codice JavaScript per triggerare il clic del pulsante "Check" alla pressione del tasto "Enter"
+    script = """
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const input = document.querySelector(".stTextInput input");
+            input.addEventListener("keypress", function(e) {
+                if (e.key === "Enter") {
+                    document.querySelector(".stButton button").click();
+                }
+            });
+        });
+    </script>
+    """
+    st.markdown(script, unsafe_allow_html=True)
+
+    if st.button('Check'):
         bar = st.session_state.barcode_input
         if bar:
             st.write("Barcode cercato:", bar)  # Visualizza il valore inserito nella barra di ricerca
@@ -44,12 +62,6 @@ def main():
                 st.table(result_df_styled)
             else:
                 st.error("CORRISPONDENZA NON TROVATA")
-        st.session_state.barcode_input = ''  # Pulisce il valore del widget dopo la ricerca
-    
-    bar = st.text_input('Inserire il barcode', key='widget')
-
-    if st.button('Check'):
-        submit()
 
 if __name__ == "__main__":
     main()
