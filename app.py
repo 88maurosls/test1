@@ -31,14 +31,19 @@ def main():
     # Barra di ricerca del barcode
     if 'barcode_input' not in st.session_state:
         st.session_state.barcode_input = ''
-    def submit(value):
-        st.session_state.barcode_input = value
-    
-    st.text_input('Inserire il barcode', key='widget', value=st.session_state.barcode_input, on_submit=submit)
 
+    # Casella di testo per l'inserimento del barcode
+    barcode_input = st.text_input('Inserire il barcode', key='widget', value=st.session_state.barcode_input)
+
+    # Pulsante per avviare la ricerca
+    if st.button('Search'):
+        submit(barcode_input)
+
+def submit(value):
+    st.session_state.barcode_input = value
     bar = st.session_state.barcode_input
-
-    if st.button('Check') or st.session_state.barcode_input:
+    df = get_dataframe()  # Funzione da implementare per ottenere il DataFrame
+    if bar:
         st.write("Barcode cercato:", bar)  # Visualizza il valore inserito nella barra di ricerca
         result_df = df[df['Collo'] == bar]
         if not result_df.empty:
