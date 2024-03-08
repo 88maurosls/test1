@@ -27,7 +27,7 @@ def main():
     # Barra di ricerca del barcode
     barcode_input = st.text_input('Inserire il barcode')
 
-    if st.button('Check'):
+    if barcode_input != "":
         check_barcode(barcode_input, df)
 
 def check_barcode(barcode_input, df):
@@ -43,8 +43,6 @@ def check_barcode(barcode_input, df):
             st.table(result_df_styled)
         else:
             st.error("CORRISPONDENZA NON TROVATA")
-    else:
-        st.warning("Inserisci un valore nella barra di ricerca prima di premere Check")
 
 if __name__ == "__main__":
     main()
