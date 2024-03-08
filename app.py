@@ -39,6 +39,10 @@ def main():
 
     st.text_input('Inserire il barcode', key='widget', on_change=submit)
 
+    # Aggiungi un pulsante "Cerca" per eseguire la ricerca
+    if st.button('Cerca'):
+        submit()  # Esegue la funzione di submit quando il pulsante "Cerca" viene premuto
+
     if st.session_state.show_results:
         check_barcode(df, st.session_state.barcode_input)  # Chiamata alla funzione check_barcode se show_results è True
 
