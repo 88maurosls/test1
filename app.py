@@ -30,14 +30,17 @@ def main():
 
     df = df[['Collo', 'customer PO', 'SKU', 'Size', 'Unità', 'UPC', 'Made in', 'Import Date', 'Rif. Sped.']]
 
-    if 'barcode' not in st.session_state:
+    if 'barcode' not in st.session_state or 'reset_barcode_input' not in st.session_state:
         st.session_state.barcode = ''
+        st.session_state.reset_barcode_input = False
 
-    barcode_input = st.text_input('Inserire il barcode', value=st.session_state.barcode)
+    barcode_input = st.text_input('Inserire il barcode', value='', on_change=lambda: setattr(st.session_state, 'reset_barcode_input', True))
 
-    if st.button('Check') or barcode_input != st.session_state.barcode:
-        st.session_state.barcode = barcode_input
-        search(df, barcode_input)
+    if st.button('Check') or st.session_state.reset_barcode_input:
+        if barcode_input:
+            search(df, barcode_input)
+        st.session_state.barcode = ''
+        st.session_state.reset_barcode_input = False
 
 if __name__ == "__main__":
     main()
