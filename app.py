@@ -32,11 +32,9 @@ def main():
     if 'barcode_input' not in st.session_state:
         st.session_state.barcode_input = ''
     def submit():
-        st.session_state.barcode_input = st.session_state.widget
-        st.session_state.widget = ''
-        bar = st.session_state.barcode_input
-
+        bar = st.session_state.widget
         if bar:
+            st.session_state.barcode_input = bar
             st.write("Barcode cercato:", bar)  # Visualizza il valore inserito nella barra di ricerca
             result_df = df[df['Collo'] == bar]
             if not result_df.empty:
@@ -49,8 +47,6 @@ def main():
                 st.error("CORRISPONDENZA NON TROVATA")
     
     st.text_input('Inserire il barcode', key='widget', on_change=submit)
-
-    bar = st.session_state.barcode_input
 
     if st.button('Check'):
         submit()
