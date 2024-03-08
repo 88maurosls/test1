@@ -36,7 +36,6 @@ def main():
         st.session_state.barcode_input = barcode_input
         st.session_state.show_results = True  # Imposta show_results su True quando l'utente invia il barcode
         check_barcode(df, st.session_state.barcode_input)  # Chiamata alla funzione check_barcode se show_results è True
-        st.session_state.barcode_input = ''  # Resetta il valore della casella di testo dopo la ricerca
 
 def check_barcode(df, bar):
     if bar:
@@ -50,8 +49,9 @@ def check_barcode(df, bar):
             st.table(result_df_styled)
         else:
             st.error("CORRISPONDENZA NON TROVATA")
-            # Resetta la sessione dopo la ricerca
-            st.session_state.barcode_input = ""
+
+    # Resetta il valore della casella di testo dopo la ricerca
+    st.session_state.barcode_input = ""
 
 if __name__ == "__main__":
     main()
