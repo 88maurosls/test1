@@ -34,12 +34,12 @@ def main():
     def submit():
         st.session_state.barcode_input = st.session_state.widget
         st.session_state.widget = ''
-    
+        check_barcode(st.session_state.barcode_input)  # Chiamata alla funzione check_barcode al submit
+
     st.text_input('Inserire il barcode', key='widget', on_change=submit)
 
-    bar = st.session_state.barcode_input
-
-    if st.button('Check'):
+def check_barcode(bar):
+    if bar:
         st.write("Barcode cercato:", bar)  # Visualizza il valore inserito nella barra di ricerca
         result_df = df[df['Collo'] == bar]
         if not result_df.empty:
