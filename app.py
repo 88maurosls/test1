@@ -39,7 +39,7 @@ def main():
 
     bar = st.session_state.barcode_input
 
-    if st.button('Check') or st.session_state.widget == '\n':
+    if st.button('Check'):
         st.write("Barcode cercato:", bar)  # Visualizza il valore inserito nella barra di ricerca
         result_df = df[df['Collo'] == bar]
         if not result_df.empty:
@@ -50,6 +50,17 @@ def main():
             st.table(result_df_styled)
         else:
             st.error("CORRISPONDENZA NON TROVATA")
+
+    # Aggiungi un codice JavaScript per catturare l'evento di pressione del tasto "Enter" e simulare il clic sul pulsante "Check"
+    st.markdown("""
+    <script>
+    window.addEventListener("keypress", function(event) {
+        if (event.key === "Enter") {
+            document.querySelector('.stButton button').click();
+        }
+    });
+    </script>
+    """)
 
 if __name__ == "__main__":
     main()
