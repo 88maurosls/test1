@@ -51,8 +51,8 @@ def main():
         else:
             st.error("CORRISPONDENZA NON TROVATA")
 
-    # Aggiungi un codice JavaScript per catturare l'evento di pressione del tasto "Enter" e simulare il clic sul pulsante "Check"
-    st.markdown("""
+    # Incorpora il codice JavaScript direttamente utilizzando la funzione st.write
+    st.write("""
     <script>
     window.addEventListener("keypress", function(event) {
         if (event.key === "Enter") {
