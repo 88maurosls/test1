@@ -7,16 +7,6 @@ def highlight_customer_po(value):
     else:
         return [''] * len(value)
 
-def search(df, barcode):
-    result_df = df[df['Collo'] == barcode]
-    if not result_df.empty:
-        st.success("TROVATA CORRISPONDENZA")
-        result_df_styled = result_df.style.apply(highlight_customer_po, axis=0)
-        st.table(result_df_styled)
-    else:
-        st.error("CORRISPONDENZA NON TROVATA")
-    return not result_df.empty
-
 def main():
     st.set_page_config(layout="wide", initial_sidebar_state="collapsed")
     st.title("Dope Barcode Scanner v2.4")
@@ -31,21 +21,30 @@ def main():
 
     df = df[['Collo', 'customer PO', 'SKU', 'Size', 'Unità', 'UPC', 'Made in', 'Import Date', 'Rif. Sped.']]
 
-    if 'barcode' not in st.session_state:
-        st.session_state['barcode'] = ''
-    
-    # Evento di cambio per la text_input
-    def on_barcode_change():
-        st.session_state['search_initiated'] = True
+    # Se 'barcode_input' non esiste in st.session_state, inizializzalo a una stringa vuota
+    if 'barcode_input' not in st.session_state:
+        st.session_state['barcode_input'] = ''
 
-    barcode_input = st.text_input('Inserire il barcode', value=st.session_state.barcode, on_change=on_barcode_change)
+    def on_barcode_submit():
+        barcode = st.session_state.barcode_input
+        if barcode:
+            st.write("Barcode cercato:", barcode)
+            result_df = df[df['Collo'] == barcode]
+            if not result_df.empty:
+                st.success("TROVATA CORRISPONDENZA")
+                result_df_styled = result_df.style.apply(highlight_customer_po, axis=0)
+                st.table(result_df_styled)
+            else:
+                st.error("CORRISPONDENZA NON TROVATA")
+            # Resetta il valore di barcode_input dopo la ricerca
+            st.session_state.barcode_input = ''
 
-    if st.button('Check') or st.session_state.get('search_initiated', False):
-        if barcode_input:
-            found = search(df, barcode_input)
-            if found:
-                st.session_state.barcode = ''
-                st.session_state.search_initiated = False
+    # Barra di ricerca del barcode con la possibilità di azionare la ricerca con il tasto Invio
+    barcode_input = st.text_input('Inserire il barcode', key='barcode_input', on_change=on_barcode_submit)
+
+    # Pulsante per la ricerca che aziona manualmente la stessa funzione di callback
+    if st.button('Check'):
+        on_barcode_submit()  # Chiama la funzione manualmente
 
 if __name__ == "__main__":
     main()
