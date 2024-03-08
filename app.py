@@ -33,6 +33,7 @@ def main():
 
     if barcode_input != "" and (last_button_pressed == 'Check' or last_button_pressed == 'Enter'):
         check_barcode(barcode_input, df)
+        st.session_state.barcode_input = ""
 
     if check_button_pressed:
         st.session_state.last_button_pressed = 'Check'
