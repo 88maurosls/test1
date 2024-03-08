@@ -7,6 +7,16 @@ def highlight_customer_po(value):
     else:
         return [''] * len(value)
 
+def search(df, barcode):
+    result_df = df[df['Collo'] == barcode]
+    if not result_df.empty:
+        st.success("TROVATA CORRISPONDENZA")
+        result_df_styled = result_df.style.apply(highlight_customer_po, axis=0)
+        return result_df_styled
+    else:
+        st.error("CORRISPONDENZA NON TROVATA")
+        return None
+
 def main():
     st.set_page_config(layout="wide", initial_sidebar_state="collapsed")
     st.title("Dope Barcode Scanner v2.4")
@@ -25,30 +35,17 @@ def main():
         st.session_state['barcode_input'] = ''
 
     def on_barcode_submit():
-        barcode = st.session_state.barcode_input
-        if barcode:
-            st.write("Barcode cercato:", barcode)
-            result_df = df[df['Collo'] == barcode]
-            if not result_df.empty:
-                st.success("TROVATA CORRISPONDENZA")
-                result_df_styled = result_df.style.apply(highlight_customer_po, axis=0)
-                st.dataframe(result_df_styled)
-            else:
-                st.error("CORRISPONDENZA NON TROVATA")
-            # Resetta il valore di barcode_input dopo la ricerca
-            st.session_state.barcode_input = ''
+        if st.session_state.barcode_input:
+            result_df_styled = search(df, st.session_state.barcode_input)
+            if result_df_styled is not None:
+                st.write("Barcode cercato:", st.session_state.barcode_input)
+                st.table(result_df_styled)
+            st.session_state.barcode_input = ''  # Clear the input box
 
-    # Barra di ricerca del barcode con la possibilità di azionare la ricerca con il tasto Invio
-    barcode_input = st.text_input('Inserire il barcode', key='barcode_input', on_change=on_barcode_submit)
+    barcode_input = st.text_input('Inserire il barcode', value=st.session_state.barcode_input, on_change=on_barcode_submit, key='barcode')
 
-    # Pulsante per la ricerca che aziona manualmente la stessa funzione di callback
     if st.button('Check'):
         on_barcode_submit()  # Chiama la funzione manualmente
-
-    # Assicurati che la logica di visualizzazione dei risultati venga eseguita dopo la definizione di tutti i widget
-    if 'display_results' in st.session_state and st.session_state.display_results:
-        on_barcode_submit()  # Visualizza i risultati
-        st.session_state.display_results = False  # Resetta il flag
 
 if __name__ == "__main__":
     main()
