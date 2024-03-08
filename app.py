@@ -7,18 +7,14 @@ def highlight_customer_po(value):
     else:
         return [''] * len(value)
 
-def search_and_display_results(df):
-    barcode = st.session_state.barcode_input
-    if barcode:
-        result_df = df[df['Collo'] == barcode]
-        if not result_df.empty:
-            st.success("TROVATA CORRISPONDENZA")
-            result_df_styled = result_df.style.apply(highlight_customer_po, axis=0)
-            st.table(result_df_styled)
-        else:
-            st.error("CORRISPONDENZA NON TROVATA")
-        # We clear the input after displaying results
-        st.session_state.barcode_input = ''
+def search(df, barcode):
+    result_df = df[df['Collo'] == barcode]
+    if not result_df.empty:
+        st.success("TROVATA CORRISPONDENZA")
+        result_df_styled = result_df.style.apply(highlight_customer_po, axis=0)
+        st.table(result_df_styled)
+    else:
+        st.error("CORRISPONDENZA NON TROVATA")
 
 def main():
     st.set_page_config(layout="wide", initial_sidebar_state="collapsed")
@@ -34,27 +30,14 @@ def main():
 
     df = df[['Collo', 'customer PO', 'SKU', 'Size', 'Unità', 'UPC', 'Made in', 'Import Date', 'Rif. Sped.']]
 
-    # Initialize session state for the input field and flag for search
-    if 'barcode_input' not in st.session_state:
-        st.session_state['barcode_input'] = ''
-    if 'search_triggered' not in st.session_state:
-        st.session_state['search_triggered'] = False
+    if 'barcode' not in st.session_state:
+        st.session_state.barcode = ''
 
-    # Input for the barcode
-    barcode_input = st.text_input('Inserire il barcode', key='barcode_input')
+    barcode_input = st.text_input('Inserire il barcode', value=st.session_state.barcode)
 
-    # Search button
-    check_button = st.button('Check')
-
-    # If the button is pressed or if the flag is true, perform search
-    if check_button or st.session_state.search_triggered:
-        search_and_display_results(df)
-        # Reset the flag
-        st.session_state.search_triggered = False
-
-    # Workaround to trigger search on enter press without using st.text_input's on_change parameter
-    if not check_button:
-        st.session_state.search_triggered = False
+    if st.button('Check') or barcode_input != st.session_state.barcode:
+        st.session_state.barcode = barcode_input
+        search(df, barcode_input)
 
 if __name__ == "__main__":
     main()
