@@ -51,6 +51,9 @@ def check_barcode(barcode_input, df):
             st.table(result_df_styled)
         else:
             st.error("CORRISPONDENZA NON TROVATA")
+            
+        # Reset della barra di ricerca
+        st.session_state.barcode_input = ""
 
 if __name__ == "__main__":
     main()
