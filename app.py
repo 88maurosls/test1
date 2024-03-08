@@ -28,20 +28,23 @@ def main():
     barcode_input = st.text_input('Inserire il barcode')
 
     if st.button('Check'):
-        bar = barcode_input.strip()  # Rimuovi spazi bianchi all'inizio e alla fine
-        if bar:  # Verifica se il valore della barra di ricerca non è vuoto
-            st.write("Barcode cercato:", bar)  # Visualizza il valore inserito nella barra di ricerca
-            result_df = df[df['Collo'] == bar]
-            if not result_df.empty:
-                st.success("TROVATA CORRISPONDENZA")
-                # Applica la formattazione condizionale alle celle della colonna 'customer PO'
-                result_df_styled = result_df.style.apply(highlight_customer_po, axis=0)
-                # Visualizzazione della tabella con Streamlit
-                st.table(result_df_styled)
-            else:
-                st.error("CORRISPONDENZA NON TROVATA")
+        check_barcode(barcode_input, df)
+
+def check_barcode(barcode_input, df):
+    bar = barcode_input.strip()  # Rimuovi spazi bianchi all'inizio e alla fine
+    if bar:  # Verifica se il valore della barra di ricerca non è vuoto
+        st.write("Barcode cercato:", bar)  # Visualizza il valore inserito nella barra di ricerca
+        result_df = df[df['Collo'] == bar]
+        if not result_df.empty:
+            st.success("TROVATA CORRISPONDENZA")
+            # Applica la formattazione condizionale alle celle della colonna 'customer PO'
+            result_df_styled = result_df.style.apply(highlight_customer_po, axis=0)
+            # Visualizzazione della tabella con Streamlit
+            st.table(result_df_styled)
         else:
-            st.warning("Inserisci un valore nella barra di ricerca prima di premere Check")
+            st.error("CORRISPONDENZA NON TROVATA")
+    else:
+        st.warning("Inserisci un valore nella barra di ricerca prima di premere Check")
 
 if __name__ == "__main__":
     main()
