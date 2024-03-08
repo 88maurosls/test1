@@ -24,12 +24,18 @@ def main():
     # Ordina le colonne nel DataFrame
     df = df[['Collo', 'customer PO', 'SKU', 'Size', 'Unità', 'UPC', 'Made in', 'Import Date', 'Rif. Sped.']]
 
+    # Verifica se la chiave 'barcode_input' è presente in session_state, se non lo è, la inizializza a una stringa vuota
+    if "barcode_input" not in st.session_state:
+        st.session_state.barcode_input = ""
+        st.session_state.show_results = False  # Variabile di stato per controllare se mostrare i risultati
+
+    # Barra di ricerca del barcode
     with st.form(key='barcode_form'):
         barcode_input = st.text_input('Inserire il barcode', key='widget')
-        submit_button = st.form_submit_button(label='Cerca')
+        st.form_submit_button(label='Cerca')
 
-    if submit_button or st.session_state.show_results:
-        check_barcode(df, barcode_input)
+    if st.session_state.show_results:
+        check_barcode(df, st.session_state.barcode_input)  # Chiamata alla funzione check_barcode se show_results è True
 
 def check_barcode(df, bar):
     if bar:
@@ -41,10 +47,8 @@ def check_barcode(df, bar):
             result_df_styled = result_df.style.apply(highlight_customer_po, axis=0)
             # Visualizzazione della tabella con Streamlit
             st.table(result_df_styled)
-            st.session_state.show_results = True
         else:
             st.error("CORRISPONDENZA NON TROVATA")
-            st.session_state.show_results = False
 
 if __name__ == "__main__":
     main()
