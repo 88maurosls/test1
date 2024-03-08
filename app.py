@@ -30,9 +30,10 @@ def main():
         st.session_state.show_results = False  # Variabile di stato per controllare se mostrare i risultati
 
     # Barra di ricerca del barcode
-    st.text_input('Inserire il barcode', key='widget', on_change=submit)
+    st.text_input('Inserire il barcode', key='widget', on_change=submit, value=st.session_state.barcode_input)
 
-    if st.button('Cerca'):
+    # Esegui submit sia quando viene premuto il pulsante "Cerca" sia quando viene premuto "Enter"
+    if st.button('Cerca') or st.session_state.barcode_input:
         submit()
 
     if st.session_state.show_results:
