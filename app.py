@@ -7,6 +7,19 @@ def highlight_customer_po(value):
     else:
         return [''] * len(value)
 
+def search_and_display_results(df):
+    barcode = st.session_state.barcode_input
+    if barcode:
+        st.write("Barcode cercato:", barcode)
+        result_df = df[df['Collo'] == barcode]
+        if not result_df.empty:
+            st.success("TROVATA CORRISPONDENZA")
+            result_df_styled = result_df.style.apply(highlight_customer_po, axis=0)
+            st.table(result_df_styled)
+        else:
+            st.error("CORRISPONDENZA NON TROVATA")
+        st.session_state.barcode_input = ''  # Reset della barra di ricerca
+
 def main():
     st.set_page_config(layout="wide", initial_sidebar_state="collapsed")
     st.title("Dope Barcode Scanner v2.4")
@@ -17,7 +30,6 @@ def main():
 
     # Specifica manualmente il tipo di dati delle colonne durante il caricamento del CSV
     dtype_dict = {'Collo': str}
-    # Utilizza la funzione `converters` per specificare il tipo di dati della colonna 'UPC' come `str`
     converters = {'customer PO': str, 'UPC': str}
     df = pd.read_csv(url, dtype=dtype_dict, converters=converters)
 
@@ -28,24 +40,11 @@ def main():
     if 'barcode_input' not in st.session_state:
         st.session_state.barcode_input = ''
 
-    barcode_input = st.text_input('Inserire il barcode', key='barcode_input')
+    # Barra di ricerca del barcode
+    st.text_input('Inserire il barcode', key='barcode_input', on_change=search_and_display_results, args=(df,))
 
-    # La funzione di ricerca e visualizzazione dei risultati
-    def search_and_display_results():
-        barcode = st.session_state.barcode_input
-        if barcode:
-            st.write("Barcode cercato:", barcode)
-            result_df = df[df['Collo'] == barcode]
-            if not result_df.empty:
-                st.success("TROVATA CORRISPONDENZA")
-                result_df_styled = result_df.style.apply(highlight_customer_po, axis=0)
-                st.table(result_df_styled)
-            else:
-                st.error("CORRISPONDENZA NON TROVATA")
-
-    # Pulsante per la ricerca
     if st.button('Check'):
-        search_and_display_results()
+        search_and_display_results(df)
 
 if __name__ == "__main__":
     main()
