@@ -31,17 +31,17 @@ def main():
     # Barra di ricerca del barcode
     if 'barcode_input' not in st.session_state:
         st.session_state.barcode_input = ''
+    def submit():
+        st.session_state.barcode_input = st.session_state.widget
+        st.session_state.widget = ''
+    
+    st.text_input('Inserire il barcode', key='widget', on_change=submit)
 
-    with st.form(key='search_form'):
-        bar = st.text_input('Inserire il barcode', key='widget')
-        st.form_submit_button(label='Check')
+    bar = st.session_state.barcode_input
 
-    if bar:
-        st.session_state.barcode_input = bar
-
-    if st.session_state.barcode_input:
-        st.write("Barcode cercato:", st.session_state.barcode_input)  # Visualizza il valore inserito nella barra di ricerca
-        result_df = df[df['Collo'] == st.session_state.barcode_input]
+    if st.button('Check'):
+        st.write("Barcode cercato:", bar)  # Visualizza il valore inserito nella barra di ricerca
+        result_df = df[df['Collo'] == bar]
         if not result_df.empty:
             st.success("TROVATA CORRISPONDENZA")
             # Applica la formattazione condizionale alle celle della colonna 'customer PO'
