@@ -24,12 +24,23 @@ def main():
     # Ordina le colonne nel DataFrame
     df = df[['Collo', 'customer PO', 'SKU', 'Size', 'Unità', 'UPC', 'Made in', 'Import Date', 'Rif. Sped.']]
 
-    # Barra di ricerca del barcode
-    barcode_input = st.text_input('Inserire il barcode')
+    # Verifica se la chiave 'barcode_input' è presente in session_state, se non lo è, la inizializza a una stringa vuota
+    if "barcode_input" not in st.session_state:
+        st.session_state.barcode_input = ""
+        st.session_state.show_results = False  # Variabile di stato per controllare se mostrare i risultati
 
-    # Pulsante "Cerca"
+    # Barra di ricerca del barcode
+    st.text_input('Inserire il barcode', key='widget', on_change=submit)
     if st.button('Cerca'):
-        check_barcode(df, barcode_input)
+        submit()
+
+    if st.session_state.show_results:
+        check_barcode(df, st.session_state.barcode_input)  # Chiamata alla funzione check_barcode se show_results è True
+
+def submit():
+    st.session_state.barcode_input = st.session_state.widget
+    st.session_state.widget = ''
+    st.session_state.show_results = True  # Imposta show_results su True quando l'utente invia il barcode
 
 def check_barcode(df, bar):
     if bar:
