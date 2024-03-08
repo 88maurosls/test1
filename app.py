@@ -15,35 +15,37 @@ def main():
     SHEET_NAME = 'test'
     url = f'https://docs.google.com/spreadsheets/d/{SHEET_ID}/gviz/tq?tqx=out:csv&sheet={SHEET_NAME}'
 
-    dtype_dict = {'Collo': str}
+    dtype_dict = {'Collo': str}  
     converters = {'customer PO': str, 'UPC': str}
     df = pd.read_csv(url, dtype=dtype_dict, converters=converters)
-
     df = df[['Collo', 'customer PO', 'SKU', 'Size', 'Unità', 'UPC', 'Made in', 'Import Date', 'Rif. Sped.']]
 
-    if 'barcode_input' not in st.session_state:
-        st.session_state.barcode_input = ''
-
     # Barra di ricerca del barcode
-    barcode_input = st.text_input('Inserire il barcode', value=st.session_state.barcode_input, key='barcode_input')
+    barcode = st.text_input('Inserire il barcode', key='barcode_input')
 
-    # Pulsante per la ricerca
-    check_button = st.button('Check')
+    # Placeholder per i risultati di ricerca
+    results_placeholder = st.empty()
 
-    # Ricerca e visualizzazione dei risultati
-    if check_button:
-        if barcode_input:
-            st.session_state.barcode_input = barcode_input  # Aggiorna il valore nello stato della sessione
-            st.write("Barcode cercato:", barcode_input)
-            result_df = df[df['Collo'] == barcode_input]
+    def search_and_display(barcode):
+        st.session_state.barcode_input = barcode  # Aggiorna il valore nello stato della sessione
+        if barcode:
+            result_df = df[df['Collo'] == barcode]
             if not result_df.empty:
                 st.success("TROVATA CORRISPONDENZA")
                 result_df_styled = result_df.style.apply(highlight_customer_po, axis=1)
-                st.table(result_df_styled)
+                results_placeholder.table(result_df_styled)
             else:
                 st.error("CORRISPONDENZA NON TROVATA")
-            st.session_state.barcode_input = ''  # Reset del campo di input
-            st.experimental_rerun()  # Riesegue lo script per aggiornare la pagina
+            st.session_state.barcode_input = ''  # Reset del campo di input dopo la visualizzazione dei risultati
+
+    # Pulsante per la ricerca
+    if st.button('Check'):
+        search_and_display(barcode)
+
+    # Azione del tasto Invio
+    if barcode and (barcode != st.session_state.get('last_barcode')):
+        st.session_state.last_barcode = barcode  # Memorizza l'ultimo barcode inserito
+        search_and_display(barcode)
 
 if __name__ == "__main__":
     main()
