@@ -29,16 +29,34 @@ def main():
         st.session_state.show_results = False
 
     # Barra di ricerca del barcode
-    with st.form(key='barcode_search'):
-        barcode_input = st.text_input('Inserire il barcode', key='barcode_input')
-        st.write('<style>#dummy { visibility: hidden; }</style>', unsafe_allow_html=True)
-        st.text_input('', key='dummy', on_change='form.submit()')
-        submitted = st.form_submit_button('Cerca')
+    barcode_input = st.text_input('Inserire il barcode', key='barcode_input', on_change="submit()")
 
-    # Esegue la ricerca solo se il modulo è stato inviato o se è stato premuto "Enter"
-    if submitted:
-        check_barcode(df, barcode_input)
+    if st.button('Cerca') or st.session_state.barcode_input:
+        submit()
 
+    if st.session_state.show_results:
+        check_barcode(df, st.session_state.barcode_input)
+
+# JavaScript per rilevare l'evento "Enter" nella barra di testo e inviare il modulo
+js_code = """
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    document.getElementById("textinput").addEventListener("keypress", function(e) {
+        if (e.key === 'Enter') {
+            document.getElementById("form").submit();
+        }
+    });
+});
+</script>
+"""
+
+st.markdown(js_code, unsafe_allow_html=True)
+
+@st.cache
+def submit():
+    st.session_state.show_results = True
+
+@st.cache
 def check_barcode(df, bar):
     if bar:
         st.write("Barcode cercato:", bar)  # Visualizza il valore inserito nella barra di ricerca
