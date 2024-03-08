@@ -40,7 +40,6 @@ def main():
     bar = st.session_state.barcode_input
 
     with st.form(key='my_form'):
-        st.form_submit_button("Check")
         if st.form_submit_button("Check"):
             st.write("Barcode cercato:", bar)  # Visualizza il valore inserito nella barra di ricerca
             result_df = df[df['Collo'] == bar]
