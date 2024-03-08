@@ -39,17 +39,18 @@ def main():
 
     bar = st.session_state.barcode_input
 
-    if st.button('Check'):
-        st.write("Barcode cercato:", bar)  # Visualizza il valore inserito nella barra di ricerca
-        result_df = df[df['Collo'] == bar]
-        if not result_df.empty:
-            st.success("TROVATA CORRISPONDENZA")
-            # Applica la formattazione condizionale alle celle della colonna 'customer PO'
-            result_df_styled = result_df.style.apply(highlight_customer_po, axis=0)
-            # Visualizzazione della tabella con Streamlit
-            st.table(result_df_styled)
-        else:
-            st.error("CORRISPONDENZA NON TROVATA")
+    with st.form(key='my_form'):
+        if st.button('Check') or st.form_submit_button("Check"):  # Aggiungi la verifica del tasto "Enter" nella form
+            st.write("Barcode cercato:", bar)  # Visualizza il valore inserito nella barra di ricerca
+            result_df = df[df['Collo'] == bar]
+            if not result_df.empty:
+                st.success("TROVATA CORRISPONDENZA")
+                # Applica la formattazione condizionale alle celle della colonna 'customer PO'
+                result_df_styled = result_df.style.apply(highlight_customer_po, axis=0)
+                # Visualizzazione della tabella con Streamlit
+                st.table(result_df_styled)
+            else:
+                st.error("CORRISPONDENZA NON TROVATA")
 
 if __name__ == "__main__":
     main()
