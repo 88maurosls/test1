@@ -37,20 +37,6 @@ def main():
     if st.session_state.show_results:
         check_barcode(df, st.session_state.barcode_input)
 
-# JavaScript per rilevare l'evento "Enter" nella barra di testo e inviare il modulo
-js_code = """
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-    document.getElementById("textinput").addEventListener("keypress", function(e) {
-        if (e.key === 'Enter') {
-            document.getElementById("form").submit();
-        }
-    });
-});
-</script>
-"""
-
-st.markdown(js_code, unsafe_allow_html=True)
 
 @st.cache
 def submit():
