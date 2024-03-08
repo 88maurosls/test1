@@ -51,13 +51,15 @@ def main():
         else:
             st.error("CORRISPONDENZA NON TROVATA")
 
-    # Incorpora il codice JavaScript direttamente utilizzando la funzione st.write
+    # Incorpora il codice JavaScript utilizzando st.write
     st.write("""
     <script>
-    window.addEventListener("keypress", function(event) {
-        if (event.key === "Enter") {
-            document.querySelector('.stButton button').click();
-        }
+    document.addEventListener("DOMContentLoaded", function(event) {
+        document.addEventListener("keydown", function(event) {
+            if (event.key === "Enter") {
+                document.querySelector(".stButton button").click();
+            }
+        });
     });
     </script>
     """)
