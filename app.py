@@ -2,57 +2,49 @@ import streamlit as st
 import pandas as pd
 
 def highlight_customer_po(value):
+    """Questa funzione evidenzia le celle della colonna 'customer PO'."""
     if value.name == 'customer PO':
         return ['background-color: #f3acac'] * len(value)
-    else:
-        return [''] * len(value)
+    return [''] * len(value)
 
 def main():
     st.set_page_config(layout="wide", initial_sidebar_state="collapsed")
     st.title("Dope Barcode Scanner v2.4")
 
+    # Caricamento dei dati dal foglio Google Sheets
     SHEET_ID = '1Ps6OqL1cLdCiD30VJTkDhSWKNYW2I7Uqhg1viCBvFXQ'
     SHEET_NAME = 'test'
     url = f'https://docs.google.com/spreadsheets/d/{SHEET_ID}/gviz/tq?tqx=out:csv&sheet={SHEET_NAME}'
-
     dtype_dict = {'Collo': str}
     converters = {'customer PO': str, 'UPC': str}
     df = pd.read_csv(url, dtype=dtype_dict, converters=converters)
-
     df = df[['Collo', 'customer PO', 'SKU', 'Size', 'Unità', 'UPC', 'Made in', 'Import Date', 'Rif. Sped.']]
 
-    # Initialize session state for the input field if not already done
-    if 'barcode_input' not in st.session_state:
-        st.session_state['barcode_input'] = ''
+    # Definizione della barra di ricerca
+    barcode_input = st.text_input('Inserire il barcode', key='barcode_input')
 
-    barcode_input = st.text_input('Inserire il barcode', value=st.session_state.barcode_input, key='barcode_input')
+    # Definizione del pulsante di ricerca
+    check_button = st.button('Check')
 
-    # Placeholder for results
+    # Placeholder per i risultati di ricerca
     results_placeholder = st.empty()
 
-    def on_barcode_submit():
+    # Se il pulsante viene premuto oppure c'è un input
+    if check_button or barcode_input:
         barcode = st.session_state.barcode_input
         if barcode:
-            with results_placeholder.container():
-                st.write("Barcode cercato:", barcode)
-                result_df = df[df['Collo'] == barcode]
-                if not result_df.empty:
-                    st.success("TROVATA CORRISPONDENZA")
-                    result_df_styled = result_df.style.apply(highlight_customer_po, axis=0)
-                    st.table(result_df_styled)
-                else:
-                    st.error("CORRISPONDENZA NON TROVATA")
-                # Reset the input
-                st.session_state.barcode_input = ''
-
-    if st.button('Check'):
-        on_barcode_submit()
-
-    # This ensures that the barcode search is triggered via Enter key or button click,
-    # and results are displayed below the text input and button.
-    if barcode_input and st.session_state.barcode_input != barcode_input:
-        st.session_state.barcode_input = barcode_input
-        on_barcode_submit()
+            # Ricerca del barcode
+            result_df = df[df['Collo'] == barcode]
+            # Se non vuoto, mostra i risultati
+            if not result_df.empty:
+                st.success("TROVATA CORRISPONDENZA")
+                # Applicazione dello stile condizionale
+                result_df_styled = result_df.style.apply(highlight_customer_po, axis=1)
+                results_placeholder.table(result_df_styled.render())  # Visualizzazione dei risultati
+            else:
+                st.error("CORRISPONDENZA NON TROVATA")
+            # Reset del campo di input
+            st.session_state.barcode_input = ''
 
 if __name__ == "__main__":
     main()
