@@ -25,23 +25,17 @@ def main():
     df = df[['Collo', 'customer PO', 'SKU', 'Size', 'Unità', 'UPC', 'Made in', 'Import Date', 'Rif. Sped.']]
 
     # Inizializza lo stato per la ricerca
-    if 'barcode_input' not in st.session_state:
-        st.session_state.barcode_input = ''
+    if 'show_results' not in st.session_state:
         st.session_state.show_results = False
 
     # Barra di ricerca del barcode
-    barcode_input = st.text_input('Inserire il barcode', key='barcode_input')
-    
-    # Aggiungi un pulsante "Cerca" per eseguire la ricerca
-    if st.button('Cerca') or st.session_state.barcode_input:
-        submit(barcode_input)  # Esegue la funzione di submit quando il pulsante "Cerca" viene premuto o quando viene premuto "Enter"
+    with st.form(key='barcode_search'):
+        barcode_input = st.text_input('Inserire il barcode', key='barcode_input')
+        submitted = st.form_submit_button('Cerca')
 
-    if st.session_state.show_results:
-        check_barcode(df, st.session_state.barcode_input)  # Chiamata alla funzione check_barcode se show_results è True
-
-def submit(barcode_input):
-    st.session_state.barcode_input = barcode_input
-    st.session_state.show_results = True  # Imposta show_results su True quando l'utente invia il barcode
+    # Esegue la ricerca solo se il modulo è stato inviato
+    if submitted:
+        check_barcode(df, barcode_input)
 
 def check_barcode(df, bar):
     if bar:
