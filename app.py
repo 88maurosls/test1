@@ -52,17 +52,19 @@ def main():
             st.error("CORRISPONDENZA NON TROVATA")
 
     # Incorpora il codice JavaScript utilizzando st.write
-    st.write("""
-    <script>
-    document.addEventListener("DOMContentLoaded", function(event) {
-        document.addEventListener("keydown", function(event) {
-            if (event.key === "Enter") {
-                document.querySelector(".stButton button").click();
-            }
+    st.write(
+        """
+        <script>
+        document.addEventListener("DOMContentLoaded", function(event) {
+            document.addEventListener("keydown", function(event) {
+                if (event.key === "Enter") {
+                    document.querySelector(".stButton button").click();
+                }
+            });
         });
-    });
-    </script>
-    """)
+        </script>
+        """
+    )
 
 if __name__ == "__main__":
     main()
