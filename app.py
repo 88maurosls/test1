@@ -31,10 +31,12 @@ def main():
     # Barra di ricerca del barcode
     with st.form(key='barcode_search'):
         barcode_input = st.text_input('Inserire il barcode', key='barcode_input')
+        # Aggiungiamo un campo nascosto che verrà automaticamente inviato quando si preme "Enter"
+        st.write('', key='dummy')  
         submitted = st.form_submit_button('Cerca')
 
-    # Esegue la ricerca solo se il modulo è stato inviato
-    if submitted:
+    # Esegue la ricerca solo se il modulo è stato inviato o se è stato premuto "Enter"
+    if submitted or st.session_state.dummy:
         check_barcode(df, barcode_input)
 
 def check_barcode(df, bar):
