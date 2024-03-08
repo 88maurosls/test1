@@ -32,27 +32,13 @@ def main():
     if 'barcode_input' not in st.session_state:
         st.session_state.barcode_input = ''
 
-    bar = st.text_input('Inserire il barcode', key='widget')
+    with st.form(key='my_form'):
+        bar = st.text_input('Inserire il barcode', key='widget')
+        submit_button = st.form_submit_button(label='Check')
 
-    # Codice JavaScript per catturare l'evento "Enter" nella casella di testo e fare clic sul pulsante "Check"
-    js_code = """
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const input = document.querySelector(".stTextInput input");
-            input.addEventListener("keypress", function(e) {
-                if (e.key === "Enter") {
-                    const button = document.querySelector(".css-1be5a7l button");
-                    button.click();
-                }
-            });
-        });
-    </script>
-    """
-    st.markdown(js_code, unsafe_allow_html=True)
-
-    if st.button('Check'):
-        bar = st.session_state.barcode_input
+    if submit_button:
         if bar:
+            st.session_state.barcode_input = bar
             st.write("Barcode cercato:", bar)  # Visualizza il valore inserito nella barra di ricerca
             result_df = df[df['Collo'] == bar]
             if not result_df.empty:
