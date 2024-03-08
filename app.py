@@ -27,8 +27,13 @@ def main():
     # Barra di ricerca del barcode
     barcode_input = st.text_input('Inserire il barcode')
 
-    if barcode_input != "":
+    check_button_pressed = st.button('Check')
+
+    if barcode_input != "" and (st.session_state.last_button_pressed == 'Check' or st.session_state.last_button_pressed == 'Enter'):
         check_barcode(barcode_input, df)
+
+    if check_button_pressed:
+        st.session_state.last_button_pressed = 'Check'
 
 def check_barcode(barcode_input, df):
     bar = barcode_input.strip()  # Rimuovi spazi bianchi all'inizio e alla fine
