@@ -24,20 +24,11 @@ def main():
     # Ordina le colonne nel DataFrame
     df = df[['Collo', 'customer PO', 'SKU', 'Size', 'Unità', 'UPC', 'Made in', 'Import Date', 'Rif. Sped.']]
 
-    # Verifica se la chiave 'barcode_input' è presente in session_state, se non lo è, la inizializza a una stringa vuota
-    if "barcode_input" not in st.session_state:
-        st.session_state.barcode_input = ""
-
-    # Funzione per gestire l'evento di inserimento del testo nella barra di ricerca del barcode
-    def handle_barcode_input(change):
-        st.session_state.barcode_input = change.new
-    
     # Barra di ricerca del barcode
-    st.text_input('Inserire il barcode', key='widget', on_change=handle_barcode_input)
-
-    bar = st.session_state.barcode_input
+    barcode_input = st.text_input('Inserire il barcode')
 
     if st.button('Check'):
+        bar = barcode_input.strip()  # Rimuovi spazi bianchi all'inizio e alla fine
         if bar:  # Verifica se il valore della barra di ricerca non è vuoto
             st.write("Barcode cercato:", bar)  # Visualizza il valore inserito nella barra di ricerca
             result_df = df[df['Collo'] == bar]
