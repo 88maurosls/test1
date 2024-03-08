@@ -21,7 +21,6 @@ def main():
 
     df = df[['Collo', 'customer PO', 'SKU', 'Size', 'Unità', 'UPC', 'Made in', 'Import Date', 'Rif. Sped.']]
 
-    # Se 'barcode_input' non esiste in st.session_state, inizializzalo a una stringa vuota
     if 'barcode_input' not in st.session_state:
         st.session_state['barcode_input'] = ''
 
@@ -33,7 +32,7 @@ def main():
             if not result_df.empty:
                 st.success("TROVATA CORRISPONDENZA")
                 result_df_styled = result_df.style.apply(highlight_customer_po, axis=0)
-                st.table(result_df_styled)
+                st.dataframe(result_df_styled)
             else:
                 st.error("CORRISPONDENZA NON TROVATA")
             # Resetta il valore di barcode_input dopo la ricerca
@@ -45,6 +44,11 @@ def main():
     # Pulsante per la ricerca che aziona manualmente la stessa funzione di callback
     if st.button('Check'):
         on_barcode_submit()  # Chiama la funzione manualmente
+
+    # Assicurati che la logica di visualizzazione dei risultati venga eseguita dopo la definizione di tutti i widget
+    if 'display_results' in st.session_state and st.session_state.display_results:
+        on_barcode_submit()  # Visualizza i risultati
+        st.session_state.display_results = False  # Resetta il flag
 
 if __name__ == "__main__":
     main()
