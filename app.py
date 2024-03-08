@@ -32,11 +32,9 @@ def main():
     if 'barcode_input' not in st.session_state:
         st.session_state.barcode_input = ''
 
-    with st.form(key='my_form'):
-        bar = st.text_input('Inserire il barcode', key='widget')
-        submit_button = st.form_submit_button(label='Check')
+    bar = st.text_input('Inserire il barcode', key='widget')
 
-    if submit_button:
+    if st.button('Check') or st.session_state.last_button_pressed == 'Enter':
         if bar:
             st.session_state.barcode_input = bar
             st.write("Barcode cercato:", bar)  # Visualizza il valore inserito nella barra di ricerca
@@ -49,9 +47,9 @@ def main():
                 st.table(result_df_styled)
             else:
                 st.error("CORRISPONDENZA NON TROVATA")
-                
-            # Pulisce la barra di ricerca dopo la ricerca
-            st.session_state.barcode_input = ""
+
+    if st.session_state.last_button_pressed != 'Enter':
+        st.session_state.last_button_pressed = None
 
 if __name__ == "__main__":
     main()
