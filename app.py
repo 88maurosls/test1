@@ -1,6 +1,5 @@
 import streamlit as st
 import pandas as pd
-from streamlit.components.v1 import html
 
 def highlight_customer_po(value):
     if value.name == 'customer PO':
@@ -32,45 +31,29 @@ def main():
     # Barra di ricerca del barcode
     if 'barcode_input' not in st.session_state:
         st.session_state.barcode_input = ''
+    def submit():
+        st.session_state.barcode_input = st.session_state.widget
+        st.session_state.widget = ''
+        bar = st.session_state.barcode_input
 
-    # Casella di testo per l'inserimento del barcode
-    barcode_input = st.text_input('Inserire il barcode', key='widget', value=st.session_state.barcode_input)
+        if bar:
+            st.write("Barcode cercato:", bar)  # Visualizza il valore inserito nella barra di ricerca
+            result_df = df[df['Collo'] == bar]
+            if not result_df.empty:
+                st.success("TROVATA CORRISPONDENZA")
+                # Applica la formattazione condizionale alle celle della colonna 'customer PO'
+                result_df_styled = result_df.style.apply(highlight_customer_po, axis=0)
+                # Visualizzazione della tabella con Streamlit
+                st.table(result_df_styled)
+            else:
+                st.error("CORRISPONDENZA NON TROVATA")
+    
+    st.text_input('Inserire il barcode', key='widget', on_change=submit)
 
-    # Codice JavaScript per triggerare il clic del pulsante "Search" alla pressione del tasto "Enter"
-    script = """
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const textInput = document.querySelector("[data-testid='stTextInput']");
-            const button = document.querySelector("[data-testid='stButton']");
-            textInput.addEventListener("keypress", function(e) {
-                if (e.key === "Enter") {
-                    button.click();
-                }
-            });
-        });
-    </script>
-    """
-    st.markdown(script, unsafe_allow_html=True)
-
-    # Pulsante per avviare la ricerca
-    if st.button('Search'):
-        submit(barcode_input)
-
-def submit(value):
-    st.session_state.barcode_input = value
     bar = st.session_state.barcode_input
-    df = get_dataframe()  # Funzione da implementare per ottenere il DataFrame
-    if bar:
-        st.write("Barcode cercato:", bar)  # Visualizza il valore inserito nella barra di ricerca
-        result_df = df[df['Collo'] == bar]
-        if not result_df.empty:
-            st.success("TROVATA CORRISPONDENZA")
-            # Applica la formattazione condizionale alle celle della colonna 'customer PO'
-            result_df_styled = result_df.style.apply(highlight_customer_po, axis=0)
-            # Visualizzazione della tabella con Streamlit
-            st.table(result_df_styled)
-        else:
-            st.error("CORRISPONDENZA NON TROVATA")
+
+    if st.button('Check'):
+        submit()
 
 if __name__ == "__main__":
     main()
