@@ -49,6 +49,9 @@ def main():
                 st.table(result_df_styled)
             else:
                 st.error("CORRISPONDENZA NON TROVATA")
+                
+            # Pulisce la barra di ricerca dopo la ricerca
+            st.session_state.barcode_input = ""
 
 if __name__ == "__main__":
     main()
