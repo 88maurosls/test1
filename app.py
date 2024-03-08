@@ -27,33 +27,26 @@ def main():
     # Barra di ricerca del barcode
     barcode_input = st.text_input('Inserire il barcode')
 
-    check_button_pressed = st.button('Check')
-
-    last_button_pressed = st.session_state.get('last_button_pressed', '')
-
-    if barcode_input != "" and (last_button_pressed == 'Check' or last_button_pressed == 'Enter'):
+    if barcode_input:
         check_barcode(barcode_input, df)
-        st.session_state.barcode_input = ""
-
-    if check_button_pressed:
-        st.session_state.last_button_pressed = 'Check'
 
 def check_barcode(barcode_input, df):
-    bar = barcode_input.strip()  # Rimuovi spazi bianchi all'inizio e alla fine
-    if bar:  # Verifica se il valore della barra di ricerca non è vuoto
-        st.write("Barcode cercato:", bar)  # Visualizza il valore inserito nella barra di ricerca
-        result_df = df[df['Collo'] == bar]
-        if not result_df.empty:
-            st.success("TROVATA CORRISPONDENZA")
-            # Applica la formattazione condizionale alle celle della colonna 'customer PO'
-            result_df_styled = result_df.style.apply(highlight_customer_po, axis=0)
-            # Visualizzazione della tabella con Streamlit
-            st.table(result_df_styled)
-        else:
-            st.error("CORRISPONDENZA NON TROVATA")
-            
+    if st.button('Check') or st.session_state.last_button_pressed == 'Enter':
+        bar = barcode_input.strip()  # Rimuovi spazi bianchi all'inizio e alla fine
+        if bar:  # Verifica se il valore della barra di ricerca non è vuoto
+            st.write("Barcode cercato:", bar)  # Visualizza il valore inserito nella barra di ricerca
+            result_df = df[df['Collo'] == bar]
+            if not result_df.empty:
+                st.success("TROVATA CORRISPONDENZA")
+                # Applica la formattazione condizionale alle celle della colonna 'customer PO'
+                result_df_styled = result_df.style.apply(highlight_customer_po, axis=0)
+                # Visualizzazione della tabella con Streamlit
+                st.table(result_df_styled)
+            else:
+                st.error("CORRISPONDENZA NON TROVATA")
         # Reset della barra di ricerca
-        st.session_state.barcode_input = ""
+        st.session_state.last_button_pressed = 'Check'
+        st.text_input('Inserire il barcode', value='', key='barcode_input')
 
 if __name__ == "__main__":
     main()
