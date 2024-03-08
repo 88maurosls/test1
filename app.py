@@ -24,29 +24,32 @@ def main():
     # Ordina le colonne nel DataFrame
     df = df[['Collo', 'customer PO', 'SKU', 'Size', 'Unità', 'UPC', 'Made in', 'Import Date', 'Rif. Sped.']]
 
+    # Verifica se la chiave 'barcode_input' è presente in session_state, se non lo è, la inizializza a una stringa vuota
+    if "barcode_input" not in st.session_state:
+        st.session_state.barcode_input = ""
+
     # Barra di ricerca del barcode
-    barcode_input = st.text_input('Inserire il barcode')
+    if 'barcode_input' not in st.session_state:
+        st.session_state.barcode_input = ''
+    def submit():
+        st.session_state.barcode_input = st.session_state.widget
+        st.session_state.widget = ''
+    
+    st.text_input('Inserire il barcode', key='widget', on_change=submit)
 
-    if barcode_input:
-        check_barcode(barcode_input, df)
+    bar = st.session_state.barcode_input
 
-def check_barcode(barcode_input, df):
-    if st.button('Check') or st.session_state.last_button_pressed == 'Enter':
-        bar = barcode_input.strip()  # Rimuovi spazi bianchi all'inizio e alla fine
-        if bar:  # Verifica se il valore della barra di ricerca non è vuoto
-            st.write("Barcode cercato:", bar)  # Visualizza il valore inserito nella barra di ricerca
-            result_df = df[df['Collo'] == bar]
-            if not result_df.empty:
-                st.success("TROVATA CORRISPONDENZA")
-                # Applica la formattazione condizionale alle celle della colonna 'customer PO'
-                result_df_styled = result_df.style.apply(highlight_customer_po, axis=0)
-                # Visualizzazione della tabella con Streamlit
-                st.table(result_df_styled)
-            else:
-                st.error("CORRISPONDENZA NON TROVATA")
-        # Reset della barra di ricerca
-        st.session_state.last_button_pressed = 'Check'
-        st.text_input('Inserire il barcode', value='', key='barcode_input')
+    if st.button('Check'):
+        st.write("Barcode cercato:", bar)  # Visualizza il valore inserito nella barra di ricerca
+        result_df = df[df['Collo'] == bar]
+        if not result_df.empty:
+            st.success("TROVATA CORRISPONDENZA")
+            # Applica la formattazione condizionale alle celle della colonna 'customer PO'
+            result_df_styled = result_df.style.apply(highlight_customer_po, axis=0)
+            # Visualizzazione della tabella con Streamlit
+            st.table(result_df_styled)
+        else:
+            st.error("CORRISPONDENZA NON TROVATA")
 
 if __name__ == "__main__":
     main()
