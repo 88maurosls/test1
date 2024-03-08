@@ -34,24 +34,10 @@ def main():
 
     bar = st.text_input('Inserire il barcode', key='widget')
 
-    # Codice JavaScript per triggerare il clic del pulsante "Check" alla pressione del tasto "Enter"
-    script = """
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const input = document.querySelector(".stTextInput input");
-            input.addEventListener("keypress", function(e) {
-                if (e.key === "Enter") {
-                    document.querySelector(".stButton button").click();
-                }
-            });
-        });
-    </script>
-    """
-    st.markdown(script, unsafe_allow_html=True)
-
-    if st.button('Check'):
-        bar = st.session_state.barcode_input
-        if bar:
+    if bar:
+        if st.button('Check') or st.session_state.enter_pressed:
+            st.session_state.enter_pressed = False
+            st.session_state.barcode_input = bar
             st.write("Barcode cercato:", bar)  # Visualizza il valore inserito nella barra di ricerca
             result_df = df[df['Collo'] == bar]
             if not result_df.empty:
