@@ -21,22 +21,20 @@ def main():
 
     df = df[['Collo', 'customer PO', 'SKU', 'Size', 'Unità', 'UPC', 'Made in', 'Import Date', 'Rif. Sped.']]
 
-    # State per tracciare l'ultima ricerca e se mostrare i risultati
-    if 'last_search' not in st.session_state:
-        st.session_state.last_search = ""
-        st.session_state.show_results = False
+    if 'barcode_input' not in st.session_state:
+        st.session_state.barcode_input = ''
 
-    barcode_input = st.text_input('Inserire il barcode', value="", on_change=lambda: setattr(st.session_state, 'show_results', False))
+    # Barra di ricerca del barcode
+    barcode_input = st.text_input('Inserire il barcode', value=st.session_state.barcode_input, key='barcode_input')
 
     # Pulsante per la ricerca
-    if st.button('Check'):
-        st.session_state.show_results = True
+    check_button = st.button('Check')
 
-    # Mostra i risultati della ricerca sotto il pulsante Check
-    if st.session_state.show_results or (barcode_input and barcode_input != st.session_state.last_search):
-        st.session_state.last_search = barcode_input  # Aggiorna l'ultimo barcode ricercato
-        st.session_state.show_results = True  # Abilita la visualizzazione dei risultati
+    # Ricerca e visualizzazione dei risultati
+    if check_button:
         if barcode_input:
+            st.session_state.barcode_input = barcode_input  # Aggiorna il valore nello stato della sessione
+            st.write("Barcode cercato:", barcode_input)
             result_df = df[df['Collo'] == barcode_input]
             if not result_df.empty:
                 st.success("TROVATA CORRISPONDENZA")
@@ -44,6 +42,8 @@ def main():
                 st.table(result_df_styled)
             else:
                 st.error("CORRISPONDENZA NON TROVATA")
+            st.session_state.barcode_input = ''  # Reset del campo di input
+            st.experimental_rerun()  # Riesegue lo script per aggiornare la pagina
 
 if __name__ == "__main__":
     main()
