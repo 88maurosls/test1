@@ -7,7 +7,7 @@ def highlight_customer_po(value):
     else:
         return [''] * len(value)
 
-def check_barcode():
+def check_barcode(df):
     barcode = st.session_state.barcode_input
     if barcode:
         st.write("Barcode cercato:", barcode)
@@ -41,10 +41,10 @@ def main():
         st.session_state.barcode_input = ''
 
     # Barra di ricerca del barcode
-    st.text_input('Inserire il barcode', key='barcode_input', on_change=check_barcode)
+    st.text_input('Inserire il barcode', key='barcode_input', on_change=lambda: check_barcode(df))
 
     if st.button('Check'):
-        check_barcode()
+        check_barcode(df)
 
 if __name__ == "__main__":
     main()
