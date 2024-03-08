@@ -7,6 +7,16 @@ def highlight_customer_po(value):
     else:
         return [''] * len(value)
 
+def display_search_results(df, barcode):
+    result_df = df[df['Collo'] == barcode]
+    if not result_df.empty:
+        st.success("TROVATA CORRISPONDENZA")
+        result_df_styled = result_df.style.apply(highlight_customer_po, axis=0)
+        st.table(result_df_styled)
+    else:
+        st.error("CORRISPONDENZA NON TROVATA")
+    return not result_df.empty
+
 def main():
     st.set_page_config(layout="wide", initial_sidebar_state="collapsed")
     st.title("Dope Barcode Scanner v2.4")
@@ -21,35 +31,19 @@ def main():
 
     df = df[['Collo', 'customer PO', 'SKU', 'Size', 'Unità', 'UPC', 'Made in', 'Import Date', 'Rif. Sped.']]
 
-    # Initialize session state for the input field if not already done
-    if 'barcode_input' not in st.session_state:
-        st.session_state['barcode_input'] = ''
+    barcode = st.text_input('Inserire il barcode', value="", key="barcode_input")
 
-    # Input field for the barcode
-    barcode_input = st.text_input('Inserire il barcode', value=st.session_state.barcode_input, key='barcode_input')
-
-    # This will change to True when the button is clicked or Enter is pressed
-    perform_search = st.button('Check')
-
-    # Placeholder for displaying the results below the search bar
-    results_placeholder = st.empty()
-
-    def on_barcode_submit():
-        barcode = barcode_input
+    if st.button('Check') or st.session_state.get('submitted', False):
         if barcode:
-            result_df = df[df['Collo'] == barcode]
-            if not result_df.empty:
-                st.success("TROVATA CORRISPONDENZA")
-                result_df_styled = result_df.style.apply(highlight_customer_po, axis=0)
-                results_placeholder.table(result_df_styled)
-            else:
-                st.error("CORRISPONDENZA NON TROVATA")
-            # Reset the barcode input
-            st.session_state.barcode_input = ''
-
-    # If the search should be performed (either button click or Enter pressed)
-    if perform_search:
-        on_barcode_submit()
+            found = display_search_results(df, barcode)
+            if found:
+                # Reset the input field after successful search
+                st.session_state.barcode_input = ""
+            # This state variable is used to ensure we only reset the barcode after a submission
+            st.session_state.submitted = True
+    else:
+        # Ensure the submitted state is False unless the button is pressed
+        st.session_state.submitted = False
 
 if __name__ == "__main__":
     main()
