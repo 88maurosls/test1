@@ -33,9 +33,8 @@ def main():
         st.session_state.barcode_input = ''
     def submit(value):
         st.session_state.barcode_input = value
-        st.session_state.widget = ''
     
-    st.text_input('Inserire il barcode', key='widget', on_change=submit, value=st.session_state.barcode_input, on_submit=submit)
+    st.text_input('Inserire il barcode', key='widget', value=st.session_state.barcode_input, on_submit=submit)
 
     bar = st.session_state.barcode_input
 
