@@ -32,24 +32,24 @@ def main():
     if 'barcode_input' not in st.session_state:
         st.session_state.barcode_input = ''
 
-    bar = st.text_input('Inserire il barcode', key='widget')
+    with st.form(key='search_form'):
+        bar = st.text_input('Inserire il barcode', key='widget')
+        st.form_submit_button(label='Check')
 
-    if st.button('Check') or st.session_state.last_button_pressed == 'Enter':
-        if bar:
-            st.session_state.barcode_input = bar
-            st.write("Barcode cercato:", bar)  # Visualizza il valore inserito nella barra di ricerca
-            result_df = df[df['Collo'] == bar]
-            if not result_df.empty:
-                st.success("TROVATA CORRISPONDENZA")
-                # Applica la formattazione condizionale alle celle della colonna 'customer PO'
-                result_df_styled = result_df.style.apply(highlight_customer_po, axis=0)
-                # Visualizzazione della tabella con Streamlit
-                st.table(result_df_styled)
-            else:
-                st.error("CORRISPONDENZA NON TROVATA")
+    if bar:
+        st.session_state.barcode_input = bar
 
-    if st.session_state.last_button_pressed != 'Enter':
-        st.session_state.last_button_pressed = None
+    if st.session_state.barcode_input:
+        st.write("Barcode cercato:", st.session_state.barcode_input)  # Visualizza il valore inserito nella barra di ricerca
+        result_df = df[df['Collo'] == st.session_state.barcode_input]
+        if not result_df.empty:
+            st.success("TROVATA CORRISPONDENZA")
+            # Applica la formattazione condizionale alle celle della colonna 'customer PO'
+            result_df_styled = result_df.style.apply(highlight_customer_po, axis=0)
+            # Visualizzazione della tabella con Streamlit
+            st.table(result_df_styled)
+        else:
+            st.error("CORRISPONDENZA NON TROVATA")
 
 if __name__ == "__main__":
     main()
