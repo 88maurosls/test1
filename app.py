@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+from streamlit.components.v1 import html
 
 def highlight_customer_po(value):
     if value.name == 'customer PO':
@@ -34,6 +35,22 @@ def main():
 
     # Casella di testo per l'inserimento del barcode
     barcode_input = st.text_input('Inserire il barcode', key='widget', value=st.session_state.barcode_input)
+
+    # Codice JavaScript per triggerare il clic del pulsante "Search" alla pressione del tasto "Enter"
+    script = """
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const textInput = document.querySelector("[data-testid='stTextInput']");
+            const button = document.querySelector("[data-testid='stButton']");
+            textInput.addEventListener("keypress", function(e) {
+                if (e.key === "Enter") {
+                    button.click();
+                }
+            });
+        });
+    </script>
+    """
+    st.markdown(script, unsafe_allow_html=True)
 
     # Pulsante per avviare la ricerca
     if st.button('Search'):
