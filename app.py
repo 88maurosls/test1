@@ -26,20 +26,18 @@ def main():
 
     # Inizializza il widget e lo stato per la ricerca
     st.session_state.barcode_input = ''
-    st.session_state.widget = ''
     st.session_state.show_results = False
 
     # Barra di ricerca del barcode
-    def submit():
-        st.session_state.barcode_input = st.session_state.widget
-        st.session_state.widget = ''
+    def submit(barcode_input):
+        st.session_state.barcode_input = barcode_input
         st.session_state.show_results = True  # Imposta show_results su True quando l'utente invia il barcode
 
-    st.text_input('Inserire il barcode', key='widget', on_change=submit)
+    barcode_input = st.text_input('Inserire il barcode')
 
     # Aggiungi un pulsante "Cerca" per eseguire la ricerca
     if st.button('Cerca'):
-        submit()  # Esegue la funzione di submit quando il pulsante "Cerca" viene premuto
+        submit(barcode_input)  # Esegue la funzione di submit quando il pulsante "Cerca" viene premuto
 
     if st.session_state.show_results:
         check_barcode(df, st.session_state.barcode_input)  # Chiamata alla funzione check_barcode se show_results è True
