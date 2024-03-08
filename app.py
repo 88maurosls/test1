@@ -45,6 +45,7 @@ def main():
                 st.table(result_df_styled)
             else:
                 st.error("CORRISPONDENZA NON TROVATA")
+        st.session_state.widget = ''  # Pulisce il valore del widget dopo la ricerca
     
     st.text_input('Inserire il barcode', key='widget', on_change=submit)
 
