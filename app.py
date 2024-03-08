@@ -15,6 +15,7 @@ def search(df, barcode):
         st.table(result_df_styled)
     else:
         st.error("CORRISPONDENZA NON TROVATA")
+    return not result_df.empty
 
 def main():
     st.set_page_config(layout="wide", initial_sidebar_state="collapsed")
@@ -30,17 +31,21 @@ def main():
 
     df = df[['Collo', 'customer PO', 'SKU', 'Size', 'Unità', 'UPC', 'Made in', 'Import Date', 'Rif. Sped.']]
 
-    if 'barcode' not in st.session_state or 'reset_barcode_input' not in st.session_state:
-        st.session_state.barcode = ''
-        st.session_state.reset_barcode_input = False
+    if 'barcode' not in st.session_state:
+        st.session_state['barcode'] = ''
+    
+    # Evento di cambio per la text_input
+    def on_barcode_change():
+        st.session_state['search_initiated'] = True
 
-    barcode_input = st.text_input('Inserire il barcode', value='', on_change=lambda: setattr(st.session_state, 'reset_barcode_input', True))
+    barcode_input = st.text_input('Inserire il barcode', value=st.session_state.barcode, on_change=on_barcode_change)
 
-    if st.button('Check') or st.session_state.reset_barcode_input:
+    if st.button('Check') or st.session_state.get('search_initiated', False):
         if barcode_input:
-            search(df, barcode_input)
-        st.session_state.barcode = ''
-        st.session_state.reset_barcode_input = False
+            found = search(df, barcode_input)
+            if found:
+                st.session_state.barcode = ''
+                st.session_state.search_initiated = False
 
 if __name__ == "__main__":
     main()
