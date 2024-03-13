@@ -7,6 +7,14 @@ def highlight_customer_po(value):
     else:
         return [''] * len(value)
 
+def format_size(value):
+    try:
+        # Converti il valore in float
+        return float(value)
+    except ValueError:
+        # Restituisci il valore originale se non è convertibile in float
+        return value
+
 def main():
     st.set_page_config(layout="wide", initial_sidebar_state="collapsed")
     st.title("Dope Barcode Scanner v2.4")
@@ -16,10 +24,13 @@ def main():
     url = f'https://docs.google.com/spreadsheets/d/{SHEET_ID}/gviz/tq?tqx=out:csv&sheet={SHEET_NAME}'
 
     # Specifica manualmente il tipo di dati delle colonne durante il caricamento del CSV
-    dtype_dict = {'Collo': str}  
+    dtype_dict = {'Collo': str}
     # Utilizza la funzione `converters` per specificare il tipo di dati della colonna 'UPC' come `str`
     converters = {'customer PO': str, 'UPC': str}
-    df = pd.read_csv(url, dtype=dtype_dict, converters=converters, float_precision='round_trip')
+    df = pd.read_csv(url, dtype=dtype_dict, converters=converters)
+
+    # Applica la funzione format_size alla colonna 'Size'
+    df['Size'] = df['Size'].apply(format_size)
 
     # Ordina le colonne nel DataFrame
     df = df[['Collo', 'customer PO', 'SKU', 'Size', 'Unità', 'UPC', 'Made in', 'Import Date', 'Rif. Sped.']]
