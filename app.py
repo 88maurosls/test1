@@ -59,12 +59,15 @@ def check_barcode(df, bar):
         result_df = df[df['Collo'] == bar]
         if not result_df.empty:
             st.success("TROVATA CORRISPONDENZA")
-            # Applica la formattazione condizionale alle celle della colonna 'customer PO'
-            result_df_styled = result_df.style.apply(highlight_customer_po, axis=0)
+            # Applica la formattazione condizionale alle celle della colonna 'customer PO' e 'Size'
+            result_df_styled = result_df.style.apply(highlight_customer_po, axis=0).format({
+                'Size': '{:.1f}'  # Formatta la colonna 'Size' con una cifra decimale
+            })
             # Visualizzazione della tabella con Streamlit
             st.table(result_df_styled)
         else:
             st.error("CORRISPONDENZA NON TROVATA")
+
 
 if __name__ == "__main__":
     main()
