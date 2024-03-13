@@ -11,8 +11,8 @@ def main():
     st.set_page_config(layout="wide", initial_sidebar_state="collapsed")
     st.title("Dope Barcode Scanner v2.4")
 
-    SHEET_ID = '1Ps6OqL1cLdCiD30VJTkDhSWKNYW2I7Uqhg1viCBvFXQ'
-    SHEET_NAME = 'test'
+    SHEET_ID = '1FTlnrfpO5UJXaTyTQ-S-sCwkbf9zGC-DluTGKLnDVfo'
+    SHEET_NAME = 'Divisione2'
     url = f'https://docs.google.com/spreadsheets/d/{SHEET_ID}/gviz/tq?tqx=out:csv&sheet={SHEET_NAME}'
 
     # Specifica manualmente il tipo di dati delle colonne durante il caricamento del CSV
