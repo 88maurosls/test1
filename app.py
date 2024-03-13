@@ -19,7 +19,7 @@ def main():
     dtype_dict = {'Collo': str}  
     # Utilizza la funzione `converters` per specificare il tipo di dati della colonna 'UPC' come `str`
     converters = {'customer PO': str, 'UPC': str}
-    df = pd.read_csv(url, dtype=dtype_dict, converters=converters)
+    df = pd.read_csv(url, dtype=dtype_dict, converters=converters, float_precision='round_trip')
 
     # Ordina le colonne nel DataFrame
     df = df[['Collo', 'customer PO', 'SKU', 'Size', 'Unità', 'UPC', 'Made in', 'Import Date', 'Rif. Sped.']]
