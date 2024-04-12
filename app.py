@@ -45,15 +45,27 @@ def main():
 def check_barcode(df, bar):
     if bar:
         st.write("Barcode cercato:", bar)  # Visualizza il valore inserito nella barra di ricerca
-        result_df = df[df['Collo'] == bar]
+        result_df = df[df['Collo'] == bar]  # Utilizza 'Collo' per trovare la corrispondenza
         if not result_df.empty:
             st.success("TROVATA CORRISPONDENZA")
             # Applica la formattazione condizionale alle celle della colonna 'customer PO'
             result_df_styled = result_df.style.apply(highlight_customer_po, axis=0)
             # Visualizzazione della tabella con Streamlit
             st.table(result_df_styled)
+
+            # Ottiene il 'Rif. Sped.' corrispondente al 'Collo' scansionato
+            shipping_ref = result_df['Rif. Sped.'].iloc[0]
+            # Seleziona tutti i record con lo stesso 'Rif. Sped.'
+            all_orders = df[df['Rif. Sped.'] == shipping_ref]
+            # Controlla se tutti questi record hanno lo stesso 'customer PO'
+            if all_orders['customer PO'].nunique() == 1:
+                customer_po = all_orders['customer PO'].iloc[0]
+                st.info(f"PACKING TUTTA DI {customer_po}")
+            else:
+                st.info("Il packing contiene ordini di clienti diversi.")
         else:
             st.error("CORRISPONDENZA NON TROVATA")
+
 
 if __name__ == "__main__":
     main()
