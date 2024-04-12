@@ -58,13 +58,16 @@ def check_barcode(df, bar):
             # Seleziona tutti i record con lo stesso 'Rif. Sped.'
             all_orders = df[df['Rif. Sped.'] == shipping_ref]
             # Controlla se tutti questi record hanno lo stesso 'customer PO'
-            if all_orders['customer PO'].nunique() == 1:
-                customer_po = all_orders['customer PO'].iloc[0]
+            unique_customer_pos = all_orders['customer PO'].unique()
+            if len(unique_customer_pos) == 1:
+                customer_po = unique_customer_pos[0]
                 st.info(f"PACKING TUTTA DI {customer_po}")
             else:
-                st.info("Il packing contiene ordini di clienti diversi.")
+                customer_po_list = ', '.join(unique_customer_pos)
+                st.info(f"Questa packing contiene ordini di {customer_po_list}")
         else:
             st.error("CORRISPONDENZA NON TROVATA")
+
 
 
 if __name__ == "__main__":
