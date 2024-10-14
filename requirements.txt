@@ -3,3 +3,4 @@ numpy
 pandas
 protobuf<=3.20.3
 altair==4.1.0
+click==8.0.4
